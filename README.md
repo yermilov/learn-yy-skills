@@ -53,31 +53,29 @@ client and install **meta** from its Directory. Point it at the repo
 depends on your Codex version — see your Codex plugin/marketplace docs. Once added, the plugin's
 skills are available the same way as any Codex plugin.
 
-### Vercel skills
+### Individual skills (`npx skills`)
 
-The skills are plain, host-agnostic `SKILL.md` files (Markdown + YAML frontmatter) under
-`plugins/<plugin>/skills/<skill>/`, so they port to any agent runtime that consumes skill files. For
-a Vercel-hosted agent, reference the skill files from this repo (vendor them into your project or load
-them at build time) and expose them to your agent per your Vercel skills configuration.
+Want a single skill rather than the whole plugin? The skills here are plain, host-agnostic `SKILL.md`
+files, so you can install one straight into your agent with
+[`npx skills`](https://github.com/vercel-labs/skills) — no marketplace registration needed. It
+supports Claude Code, Codex, Cursor, and 60+ other agents.
 
-> Exact Vercel-skills wiring depends on your setup — confirm the mechanism for your project and adjust
-> this section accordingly.
+```bash
+# See what skills this repo offers
+npx skills add yermilov/learn-yy-skills --list
 
-## Repository layout
+# Install a single skill (by its name) into the current project
+npx skills add yermilov/learn-yy-skills --skill plugin-dev
 
-```
-.claude-plugin/marketplace.json     # Claude marketplace manifest
-.agents/plugins/marketplace.json    # Codex marketplace manifest
-plugins/<name>/
-  .claude-plugin/plugin.json         # Claude plugin manifest
-  .codex-plugin/plugin.json          # Codex plugin manifest
-  README.md
-  skills/<skill>/SKILL.md            # the skill (host-agnostic)
+# …into a specific agent's config, or globally
+npx skills add yermilov/learn-yy-skills --skill plugin-dev -a claude-code
+npx skills add yermilov/learn-yy-skills --skill plugin-dev -a codex --global
 ```
 
-Adding a plugin or a skill has a **version-bump discipline** the marketplace auto-update depends on —
-the `plugin-dev` skill spells it out. In short: bump a plugin's `version` in **both** its manifests on
-any change, and bump the Claude marketplace's `metadata.version` whenever the plugin **list** changes.
+Omit `--skill` to install every skill in the repo; run `npx skills --help` for all agents and options.
+
+> Working in this repo? See [`CLAUDE.md`](CLAUDE.md) (symlinked as `AGENTS.md`) for the repository
+> layout and the version-bump discipline the marketplace auto-update depends on.
 
 ## License
 

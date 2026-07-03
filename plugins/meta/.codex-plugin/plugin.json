@@ -1,0 +1,24 @@
+{
+  "name": "meta",
+  "version": "0.1.0",
+  "description": "Meta plugin for the learn-yy-skills marketplace: the plugin-dev skill — a prescriptive guide to building a great skills marketplace and the plugins in it (repo layout, Claude + Codex dual manifests, version discipline, and what makes a plugin/skill worth installing). The same SKILL.md files back the Claude Code plugin.",
+  "author": {
+    "name": "Yaroslav Yermilov",
+    "email": "yermilov17@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["meta", "plugin-dev", "marketplace", "plugins", "skills", "packaging"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Meta",
+    "shortDescription": "How to build a great skills marketplace + plugins",
+    "longDescription": "The meta plugin for the learn-yy-skills marketplace. Its plugin-dev skill is a prescriptive guide to building a great skills marketplace and the plugins that live in it: the repo layout, the Claude (.claude-plugin) + Codex (.agents/.codex-plugin) dual-manifest packaging, the version-bump discipline the marketplace auto-update keys off, and what makes a plugin/skill actually worth installing. The same SKILL.md files back the Claude Code plugin.",
+    "developerName": "Yaroslav Yermilov",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Help me set up a skills marketplace like this one",
+      "How should I structure a Claude + Codex plugin?"
+    ]
+  }
+}

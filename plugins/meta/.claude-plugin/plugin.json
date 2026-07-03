@@ -1,0 +1,9 @@
+{
+  "name": "meta",
+  "version": "0.1.0",
+  "description": "Meta plugin for the learn-yy-skills marketplace: the plugin-dev skill — a prescriptive guide to building a great skills marketplace and the plugins in it (repo layout, Claude + Codex dual manifests, version discipline, and what makes a plugin/skill worth installing).",
+  "author": {
+    "name": "Yaroslav Yermilov",
+    "email": "yermilov17@gmail.com"
+  }
+}

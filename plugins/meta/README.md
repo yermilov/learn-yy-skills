@@ -14,9 +14,10 @@ itself. It ships three skills:
   description/frontmatter that decides triggering, progressive-disclosure structure and length,
   writing style for an LLM reader, when to bundle scripts/references/assets, named anti-patterns,
   and how to make one skill portable across both Claude and Codex.
-- **session-retro** — a self-improvement loop: reflect on a just-completed working session, find
-  where instructions or skills fell short, and turn that friction into concrete, durable skill
-  improvements.
+- **marketplace-health** — diagnose an already-installed Claude Code marketplace: is the latest
+  published version of each plugin actually installed (vs a stale cached copy), and is auto-update
+  enabled so it stays current? Trigger on "am I on the latest?", "why didn't my new skill show up
+  after I pushed?", or "are plugin auto-updates on?".
 
 ## Authoring conventions
 

@@ -1,7 +1,7 @@
 {
   "name": "meta",
-  "version": "0.2.0",
-  "description": "Meta plugin for the learn-yy-skills marketplace: three skills — plugin-dev (a prescriptive guide to building a great skills marketplace: repo layout, Claude + Codex dual manifests, version discipline, what makes a plugin/skill worth installing), skill-authoring (how to write, structure, and review Agent Skills that reliably trigger and stay lean), and session-retro (reflect on a just-completed session and turn the friction into concrete skill improvements). The same SKILL.md files back the Claude Code plugin.",
+  "version": "0.3.0",
+  "description": "Meta plugin for the learn-yy-skills marketplace: three skills — plugin-dev (a prescriptive guide to building a great skills marketplace: repo layout, Claude + Codex dual manifests, version discipline, what makes a plugin/skill worth installing), skill-authoring (how to write, structure, and review Agent Skills that reliably trigger and stay lean), and marketplace-health (check that an installed marketplace is on the latest version and has auto-update enabled). The same SKILL.md files back the Claude Code plugin.",
   "author": {
     "name": "Yaroslav Yermilov",
     "email": "yermilov17@gmail.com"
@@ -19,7 +19,7 @@
   "interface": {
     "displayName": "Meta",
     "shortDescription": "How to build a great skills marketplace + plugins",
-    "longDescription": "The meta plugin for the learn-yy-skills marketplace — the tooling for building the marketplace itself and the skills in it. plugin-dev: a prescriptive guide to a great skills marketplace (repo layout, the Claude .claude-plugin + Codex .agents/.codex-plugin dual-manifest packaging, the version-bump discipline the auto-update keys off). skill-authoring: how to write, structure, and review Agent Skills that reliably trigger and stay lean. session-retro: reflect on a just-completed session and turn the friction into concrete skill improvements. The same SKILL.md files back the Claude Code plugin.",
+    "longDescription": "The meta plugin for the learn-yy-skills marketplace — the tooling for building the marketplace itself and the skills in it. plugin-dev: a prescriptive guide to a great skills marketplace (repo layout, the Claude .claude-plugin + Codex .agents/.codex-plugin dual-manifest packaging, the version-bump discipline the auto-update keys off). skill-authoring: how to write, structure, and review Agent Skills that reliably trigger and stay lean. marketplace-health: diagnose an installed marketplace — is the latest plugin version installed, and is auto-update enabled. The same SKILL.md files back the Claude Code plugin.",
     "developerName": "Yaroslav Yermilov",
     "category": "Productivity",
     "capabilities": [

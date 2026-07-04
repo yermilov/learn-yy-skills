@@ -1,7 +1,7 @@
 {
   "name": "meta",
-  "version": "0.1.0",
-  "description": "Meta plugin for the learn-yy-skills marketplace: the plugin-dev skill — a prescriptive guide to building a great skills marketplace and the plugins in it (repo layout, Claude + Codex dual manifests, version discipline, and what makes a plugin/skill worth installing).",
+  "version": "0.2.0",
+  "description": "Meta plugin for the learn-yy-skills marketplace: three skills — plugin-dev (a prescriptive guide to building a great skills marketplace: repo layout, Claude + Codex dual manifests, version discipline, what makes a plugin/skill worth installing), skill-authoring (how to write, structure, and review Agent Skills that reliably trigger and stay lean), and session-retro (reflect on a just-completed session and turn the friction into concrete skill improvements).",
   "author": {
     "name": "Yaroslav Yermilov",
     "email": "yermilov17@gmail.com"

@@ -9,9 +9,8 @@ description: >-
   portable across both Claude and Codex (host-agnostic body + the dual-manifest packaging). Use when
   creating, writing, editing, improving, reviewing, shortening, or debugging a skill / SKILL.md /
   plugin skill / Claude or Codex skill / reusable agent instruction module — when a skill won't
-  trigger or is too long or bloated, or when making a skill work on both Claude and Codex. Pairs with
-  `skill-creator` (the build/eval loop + scripts) and `session-retro`
-  (finds what to improve). Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
+  trigger or is too long or bloated, or when making a skill work on both Claude and Codex.
+  Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
   не тригериться», "write a skill", "make a SKILL.md", "my skill never triggers".
 ---
 
@@ -19,9 +18,8 @@ description: >-
 
 How to write an **Agent Skill** that an agent you've never met, on a prompt you never saw, reliably
 triggers, follows, and benefits from — thousands of times. This is the prescriptive **writing/design**
-guide; `skill-creator` owns the build-and-eval _mechanics_ (scaffolding, eval scripts, packaging) and
-`session-retro` finds _what_ to improve. Use this one to make the prose itself good. (Same split as
-`diagram-design` ↔ `design-system`.)
+guide: how to make the prose itself good. (The separate _mechanics_ of scaffolding, running evals, and
+packaging a skill are a build/eval concern, not this skill's job — see below.)
 
 > This skill practices what it preaches — its own description, structure, and length are meant as a
 > worked example. If you change it, keep it that way.
@@ -44,8 +42,8 @@ procedure + optional tools/references discoverable only when needed.**
   or makes the agent slower/more expensive.
 - Tuning a `description` for better triggering.
 
-**When NOT to use it:** for the _mechanics_ of running evals / packaging a `.skill` (that's
-`skill-creator`), or for analysing a finished session to decide what to change (that's `session-retro`).
+**When NOT to use it:** for the _mechanics_ of running evals / packaging a `.skill`, or for analysing
+a finished session to decide what to change — this skill is about writing the prose well.
 
 ## 1. The description is the trigger — write it like a classifier
 
@@ -181,8 +179,8 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
 - **Heavyweight (shared/production skills):** blind A/B — hide which output is which and score against
   a rubric (task success, correctness, completeness, brevity, intent, tool use, safety,
   recoverability). For coding skills also track tests/lint/typecheck and files changed.
-- `skill-creator` automates this loop (eval runner, grader, description-optimizer) — hand off to it
-  for the heavyweight version rather than rebuilding it here.
+- A dedicated eval harness (runner, grader, description-optimizer) is worth building once for the
+  heavyweight version rather than hand-scoring every time.
 
 ## 8. Maintenance & safety
 
@@ -208,13 +206,12 @@ wrapper each host expects.
   handles (Claude's `Task`/`Skill` tools, "Claude Code"). The same instruction then lands anywhere.
 - **Gate what isn't universal.** Subagents (Codex App has none), a specific MCP tool, a slash command,
   a screen — these differ per host. Either offer a fallback ("research via subagents _if available_,
-  else inline") or put the divergent steps in a clearly-labelled platform section. `skill-creator`
-  models this exactly — separate "Claude.ai-specific" and "Cowork-specific" sections under one shared
-  workflow.
+  else inline") or put the divergent steps in a clearly-labelled platform section — e.g. separate
+  "Claude-specific" and "Codex-specific" sections under one shared workflow.
 - **Don't hard-depend on harness specifics** — fixed paths, a tool being callable _this_ turn (MCP
   tool lists are connection-cached), or one host's permission model.
 
-**Ship the wrapper for both hosts** (juggernaut packages every plugin for both):
+**Ship the wrapper for both hosts** (package every plugin for both):
 
 - Two plugin manifests per plugin: **`.claude-plugin/plugin.json`** (minimal — name/version/
   description/author) and **`.codex-plugin/plugin.json`** (adds an `interface` block —
@@ -250,13 +247,12 @@ on one but not the other is the usual portability failure.
 8. Shipping to more than one host? Body names **capabilities, not host-only tools**; both manifests +
    both marketplaces registered; plugin `version` bumped in **lockstep**; tested on each host (§9).
 
-## juggernaut specifics
+## In this marketplace
 
-- Skills live in `plugins/<plugin>/skills/<name>/SKILL.md`. Study `do-task`, `design-system`,
-  `diagram-design`, and `session-retro` as in-house exemplars of voice (rich trigger lists incl.
-  Ukrainian phrasings, "when NOT to use", explain-the-why, concrete examples from real sessions).
+- Skills live in `plugins/<plugin>/skills/<name>/SKILL.md`. Study the other skills already in this
+  repo as voice exemplars — rich trigger lists (add native-language phrasings if your users write in
+  another language), a "when NOT to use" boundary, explain-the-why prose, and concrete examples.
 - **Shipping is two manifests + the marketplace** — see §9 for the full Claude+Codex packaging rule
   (bump the plugin `version` in both manifests on any change; bump the Claude marketplace's
   `metadata.version` only when adding/removing a plugin). Update the plugin `README.md` skill list too.
-- Pairs with `skill-creator` (mechanics/eval loop) and `session-retro` (analysis) — name them so the
-  agent chains to the right tool instead of reimplementing it.
+  The `plugin-dev` skill and `CLAUDE.md` spell out the exact version-bump discipline.

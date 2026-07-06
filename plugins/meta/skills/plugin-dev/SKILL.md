@@ -186,6 +186,30 @@ register it in both marketplace files, bump the SOURCE plugin's version, and upd
 Cross-skill references resolve by **name** across all installed plugins, so no rewrites are needed —
 just keep the referenced plugins installed alongside.
 
+## 7. Maintaining the READMEs
+
+The two README layers are the marketplace's human-facing surface; they go stale the moment a change
+ships without touching them, so treat updating them as part of every change, not an afterthought.
+
+**Root `README.md`** (the marketplace):
+- The **Plugins table** lists every plugin with a description of the **plugin as a whole** — its job
+  and the skills it ships (with a few-word gist each). Don't let the row describe just one skill of a
+  multi-skill plugin, and don't duplicate a skill's full frontmatter — one table row per plugin.
+- Update the row whenever a plugin's skill set or purpose changes; add/remove rows in the same commit
+  that adds/removes a plugin (together with the manifest edits and the marketplace
+  `metadata.version` bump).
+- Keep it to what exists **now** — no placeholder/"coming soon" filler rows or notes.
+- The rest of the root README is install instructions per host — verify they still hold whenever the
+  install flow or repo name changes.
+
+**Per-plugin `plugins/<name>/README.md`:**
+- A short intro (what the plugin is for) + a **Skills** list: one bullet per skill with what it does
+  and when it triggers — enough for a human browsing the repo to decide to install.
+- Update the bullet in the same commit that adds, removes, renames, or materially changes a skill.
+  A plugin README edit is a plugin-file change, so the plugin **version bump** (section 4) applies.
+- Keep repo-wide conventions (layout, version discipline) out of plugin READMEs — they live in this
+  skill and in the repo's `CLAUDE.md`; a plugin README describes only that plugin.
+
 ## Pre-ship checklist
 
 1. Repo has both marketplace manifests (`.claude-plugin/` + `.agents/plugins/`), listing the same plugins.
@@ -194,4 +218,6 @@ just keep the referenced plugins installed alongside.
 4. Versions bumped for the change you made (plugin version always; marketplace `metadata.version` if the plugin list changed).
 5. No secrets committed; a `LICENSE` present (public repo).
 6. Root README documents how to install on each target host (see the repo README).
-7. All JSON parses (`jq . <file>`), and each `SKILL.md` frontmatter parses as YAML.
+7. READMEs are in sync with the change (root Plugins table row per plugin; plugin README's skill
+   bullets) — see section 7.
+8. All JSON parses (`jq . <file>`), and each `SKILL.md` frontmatter parses as YAML.

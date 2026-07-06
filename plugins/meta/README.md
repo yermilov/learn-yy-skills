@@ -18,13 +18,3 @@ itself. It ships three skills:
   published version of each plugin actually installed (vs a stale cached copy), and is auto-update
   enabled so it stays current? Trigger on "am I on the latest?", "why didn't my new skill show up
   after I pushed?", or "are plugin auto-updates on?".
-
-## Authoring conventions
-
-This plugin is the **source of truth**; installed copies are replaced by re-installing from the
-marketplace. On any change to a plugin's files, **bump the plugin `version` in BOTH
-`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`** in lockstep — the marketplace
-auto-update keys off the declared version, so an unchanged version means clients keep their cached
-snapshot and never re-pull. When the marketplace's plugin **list** changes (a plugin added/removed),
-also bump `metadata.version` in `.claude-plugin/marketplace.json`. See the **plugin-dev** skill for
-the full rationale and checklist.

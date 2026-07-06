@@ -17,9 +17,7 @@ It ships as a **dual marketplace** so one source serves both hosts:
 
 | Plugin | What it is |
 | --- | --- |
-| **meta** | `plugin-dev` — how to build a great skills marketplace and the plugins in it (repo layout, the Claude + Codex dual-manifest packaging, version discipline, and what makes a plugin/skill worth installing). |
-
-_(More plugins will be added here as they're showcased.)_
+| **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), and `marketplace-health` (checking an installed marketplace is current and auto-updating). |
 
 ## Install
 

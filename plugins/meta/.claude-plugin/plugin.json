@@ -1,7 +1,7 @@
 {
   "name": "meta",
-  "version": "0.3.2",
-  "description": "Meta plugin for the learn-yy-skills marketplace: three skills — plugin-dev (a prescriptive guide to building a great skills marketplace: repo layout, Claude + Codex dual manifests, version discipline, what makes a plugin/skill worth installing), skill-authoring (how to write, structure, and review Agent Skills that reliably trigger and stay lean), and marketplace-health (check that an installed marketplace is on the latest version and has auto-update enabled). The same SKILL.md files back the Claude Code plugin.",
+  "version": "0.4.0",
+  "description": "Meta plugin for the learn-yy-skills marketplace: four skills — plugin-dev (a prescriptive guide to building a great skills marketplace: repo layout, Claude + Codex dual manifests, version discipline, what makes a plugin/skill worth installing), skill-authoring (how to write, structure, and review Agent Skills that reliably trigger and stay lean), marketplace-health (check that an installed marketplace is on the latest version and has auto-update enabled), and enable-autoupdate (turn that auto-update on) — plus a SessionStart hook that surfaces a marketplace-health banner at session start. The same SKILL.md files back the Claude Code plugin.",
   "author": {
     "name": "Yaroslav Yermilov",
     "email": "yermilov17@gmail.com"

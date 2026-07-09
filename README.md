@@ -10,14 +10,11 @@ It ships as a **dual marketplace** so one source serves both hosts:
 - **Claude** reads [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 - **Codex** reads [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json)
 
-> New here? The **`meta`** plugin's **`plugin-dev`** skill documents exactly how this marketplace is
-> structured and how to add your own plugins/skills to it.
-
 ## Plugins
 
 | Plugin | What it is |
 | --- | --- |
-| **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), and `marketplace-health` (checking an installed marketplace is current and auto-updating). |
+| **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), `marketplace-health` (checking an installed marketplace is current and auto-updating), and `enable-autoupdate` (turning that auto-update on). Also ships a Claude Code `SessionStart` hook that surfaces a marketplace-health banner at session start. |
 
 ## Install
 

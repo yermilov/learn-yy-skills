@@ -2,15 +2,13 @@
 name: skill-authoring
 description: >-
   Write, structure, and review great Agent Skills (SKILL.md files) so an agent reliably triggers and
-  follows them. Covers the description/frontmatter that decides triggering, progressive-disclosure
-  structure and length, writing style for an LLM reader (imperative + explain-the-why, and the
-  Must/Default/Prefer/Avoid/Never constraint hierarchy instead of walls of ALL-CAPS), when to bundle
-  scripts/references/assets, named anti-patterns, how to eval a skill, and how to make ONE skill
-  portable across both Claude and Codex (host-agnostic body + the dual-manifest packaging). Use when
-  creating, writing, editing, improving, reviewing, shortening, or debugging a skill / SKILL.md /
-  plugin skill / Claude or Codex skill / reusable agent instruction module — when a skill won't
-  trigger or is too long or bloated, or when making a skill work on both Claude and Codex.
-  Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
+  follows them. Covers the description/frontmatter that decides triggering, the three kinds of skill
+  (knowledge / task / workflow), progressive-disclosure structure and length, writing style for an LLM
+  reader (constraint hierarchy over walls of ALL-CAPS), when to bundle scripts/references/assets, named
+  anti-patterns, how to eval a skill, and portability across both Claude and Codex (host-agnostic body
+  + dual-manifest packaging). Use when creating, writing, editing, improving, reviewing, shortening, or
+  debugging a skill / SKILL.md / plugin skill — when a skill won't trigger, is too long, or must work
+  on both Claude and Codex. Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
   не тригериться», "write a skill", "make a SKILL.md", "my skill never triggers".
 ---
 
@@ -34,6 +32,27 @@ A skill has exactly three jobs, in order. Everything below serves them; anything
 
 A skill is not "a big prompt in a file." It's a **tiny routing contract + a focused operating
 procedure + optional tools/references discoverable only when needed.**
+
+## The three kinds of skill
+
+Decide which kind you're writing before you start — it sets the shape, the length, and what to bundle:
+
+1. **Knowledge skill** — documentation the agent *reads to understand a domain better*: the concepts,
+   conventions, and mental model it then reasons from. There's no procedure to run; the value is
+   comprehension. Keep it reference-like, and push bulky specs/tables to `references/`.
+2. **Task skill** — a *saved prompt plus the knowledge to apply it well*. Open with the few sentences a
+   user would actually type to get the thing done, then expand below with the troubleshooting, edge
+   cases, and detailed guidance — the hard-won learnings that make the model do it **better** than
+   running that prompt cold. The opening prompt is the contract; everything under it is know-how.
+3. **Workflow skill** — a *step-by-step procedure* for something non-trivial, with branches,
+   conditions, and loops. At the start of execution the agent should register each step as a TODO item
+   and work the list; each step is essentially its own task skill (a prompt + how to do it well). Use
+   when order and completeness matter and a single prompt would skip steps.
+
+Most skills are one kind; some blend (a task skill leaning on an embedded knowledge section). The kind
+sets your defaults — knowledge leads with prose + references, a task skill leads with its prompt, a
+workflow skill leads with its ordered steps and a TODO list — so the structure guidance below (§2)
+applies *through* the lens of the kind you picked.
 
 ## When to use this skill
 

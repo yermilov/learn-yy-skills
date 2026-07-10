@@ -38,12 +38,15 @@ scripts consistent, testable, and safe to refactor.
 - **Skill / tooling scripts:** a `.ts` invoked with `bun run <path>` (or a `#!/usr/bin/env bun`
   shebang + `chmod +x`). Take config via flags/args; read secrets from the environment, never
   hard-code them (the repo is public).
-- **Hook scripts** run on the **consumer's** machine at session start, so: (a) the hook command
-  invokes Bun — `"command": "bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/<name>.ts\""` — and (b) it
-  must **degrade to a clean no-op when Bun (or anything it needs) is missing** — produce no output
-  and exit 0 rather than error. A hook must never break the session that loads it. Note the tradeoff:
-  a Bun+TS hook only shows its output where Bun is installed, unlike a POSIX-shell hook that runs
-  anywhere — that's the price of the typed toolchain, accepted deliberately here.
+- **Hook scripts** are a **thin POSIX-shell wrapper** that detects Bun and, when present, `exec`s the
+  real Bun + TypeScript check (`<name>.ts`); the wrapper itself stays minimal (a couple of `command
+  -v bun` lines), all logic lives in the `.ts`. The wrapper must handle the **Bun-missing** case
+  without ever erroring or breaking the session — it either stays a **clean no-op** (no output,
+  exit 0) or emits **one** non-error cross-host `{"hookSpecificOutput":{…}}` line pointing the user at
+  the `install-bun` skill (a self-resolving nudge that disappears once Bun is installed). It must
+  **never** exit non-zero or block the session. Note the tradeoff: the Bun-backed half only runs where
+  Bun is installed — that's the price of the typed toolchain, accepted deliberately here (the shell
+  wrapper is the one exception to the Bun-only rule, precisely so it can run before Bun exists).
 
 (Any shell scripts that predate this rule should be converted to Bun + TypeScript when next touched.)
 

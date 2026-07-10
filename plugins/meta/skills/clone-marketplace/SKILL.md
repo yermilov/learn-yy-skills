@@ -6,11 +6,12 @@ description: >-
   version, never a copy that happens to be on this machine. Use when the user wants to "create/start
   my own skills marketplace", "clone/bootstrap a marketplace like this one", "scaffold a new plugin
   marketplace repo", or "update my marketplace's meta plugin / structure to the latest" — «створи свій
-  маркетплейс скілів», «онови meta-плагін маркетплейсу». Runs the bundled clone-marketplace.sh:
-  --new scaffolds a fresh repo (both marketplace manifests + the meta plugin + CLAUDE.md/AGENTS.md +
-  README + MIT LICENSE + git init); --update refreshes an existing repo's meta plugin + scaffolding in
-  place, leaving your own plugins untouched. Do NOT use to add one plugin/skill to a marketplace you
-  already run (that is plugin-dev), nor to write the SKILL.md prose itself (skill-authoring).
+  маркетплейс скілів», «онови meta-плагін маркетплейсу». Runs the bundled Bun script
+  clone-marketplace.ts (needs Bun; else run install-bun): --new scaffolds a fresh repo (both
+  marketplace manifests + meta plugin + CLAUDE.md/AGENTS.md + README + LICENSE + git init); --update
+  refreshes an existing repo's meta plugin + scaffolding in place, leaving your plugins untouched. Do
+  NOT use to add one plugin/skill to a marketplace you already run (that is plugin-dev), nor to write
+  SKILL.md prose (skill-authoring).
 ---
 
 # clone-marketplace — start a marketplace, or update it, from the canonical one
@@ -29,12 +30,15 @@ follow-ups (create the GitHub repo, review, commit).
 
 ## The script
 
+Written in Bun + TypeScript (per the repo's script rule), so it needs **Bun** installed — if `bun` is
+missing, run the **install-bun** skill first.
+
 ```
-scripts/clone-marketplace.sh --new    <target-dir> --name <marketplace-name> \
-                             [--display "<UI name>"] [--owner-name "<name>"] \
-                             [--owner-email "<email>"] [--source <git-url>]
-scripts/clone-marketplace.sh --update <target-dir> [--source <git-url>]
-scripts/clone-marketplace.sh --new ... --dry-run        # print actions, change nothing
+bun run scripts/clone-marketplace.ts --new    <target-dir> --name <marketplace-name> \
+                                     [--display "<UI name>"] [--owner-name "<name>"] \
+                                     [--owner-email "<email>"] [--source <git-url>]
+bun run scripts/clone-marketplace.ts --update <target-dir> [--source <git-url>]
+bun run scripts/clone-marketplace.ts --new ... --dry-run   # print actions, change nothing
 ```
 
 `--source` defaults to `https://github.com/yermilov/learn-yy-skills`; override it to seed from a
@@ -44,7 +48,7 @@ that stays a human step (auth, naming, visibility).
 ## 1. Create a NEW marketplace
 
 ```
-scripts/clone-marketplace.sh --new ./my-skills --name my-skills \
+bun run scripts/clone-marketplace.ts --new ./my-skills --name my-skills \
   --owner-name "Ada Lovelace" --owner-email "ada@example.com"
 ```
 
@@ -62,7 +66,7 @@ Then the **human follow-ups** (the script prints them):
 ## 2. UPDATE an existing marketplace to the latest
 
 ```
-scripts/clone-marketplace.sh --update ./my-skills          # (add --dry-run first to preview)
+bun run scripts/clone-marketplace.ts --update ./my-skills   # (add --dry-run first to preview)
 ```
 
 Refreshes an existing marketplace repo **in place**:

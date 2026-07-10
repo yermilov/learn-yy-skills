@@ -1,7 +1,7 @@
 # meta
 
 The **meta** plugin for the `learn-yy-skills` marketplace — the tooling for building the marketplace
-itself. It ships five skills and a session-start hook:
+itself. It ships six skills and a session-start hook:
 
 ## Skills
 
@@ -26,20 +26,29 @@ itself. It ships five skills and a session-start hook:
   reports auto-update OFF.
 - **clone-marketplace** — bootstrap a **new** marketplace repo (or bring an existing one up to date)
   from this marketplace's structure + meta plugin, always fetched from **GitHub at the latest
-  version**. Ships a `clone-marketplace.sh` script: `--new` scaffolds a fresh repo (both marketplace
-  manifests, the meta plugin, CLAUDE.md/AGENTS.md, README, MIT LICENSE, git init); `--update`
-  refreshes an existing repo's meta plugin + scaffolding in place, leaving your own plugins untouched.
-  Trigger on "create/start my own skills marketplace", "clone a marketplace like this one", or "update
-  my marketplace's meta plugin to the latest".
+  version**. Ships a Bun script `clone-marketplace.ts`: `--new` scaffolds a fresh repo (both
+  marketplace manifests, the meta plugin, CLAUDE.md/AGENTS.md, README, MIT LICENSE, git init);
+  `--update` refreshes an existing repo's meta plugin + scaffolding in place, leaving your own plugins
+  untouched. Trigger on "create/start my own skills marketplace", "clone a marketplace like this one",
+  or "update my marketplace's meta plugin to the latest".
+- **install-bun** — install the **Bun** runtime this marketplace's scripts run on. Its executables
+  (the `clone-marketplace` script and the session-start health hook) are written in **Bun +
+  TypeScript**, so a machine without Bun can't run them. Presents the install command (official
+  installer, Homebrew, or npm) for the user to run, then verifying `bun --version` and fixing PATH.
+  Trigger when Bun is missing — the session-start check reports it isn't installed, a `bun` command
+  fails, or the user asks to "install bun".
 
 ## Session-start hook
 
 The plugin also ships a **cross-host `SessionStart` hook** (`hooks/hooks.json` →
 `hooks/scripts/marketplace-health-check.sh`) that runs on **both Claude Code and Codex** (both
 auto-discover `hooks/hooks.json` and set `CLAUDE_PLUGIN_ROOT`; the script emits the cross-host
-`{"hookSpecificOutput":{…}}` JSON both accept). On session start it speaks **only when this
-marketplace won't stay current on its own** — Claude Code with `autoUpdate` off, or a Codex
-`source_type = "local"` (non-git) install — injecting a one-line nudge to run the `enable-autoupdate`
-skill. When auto-update is active (Claude Code `autoUpdate` on, or a Codex git marketplace) it stays
-**silent**. It detects the host from the SessionStart payload, is local-only (no network),
-non-blocking, and degrades quietly to silence if a file or tool is missing.
+`{"hookSpecificOutput":{…}}` JSON both accept). The entry point is a **thin shell wrapper**: it
+detects whether **Bun** is installed and, if so, `exec`s the real check —
+`marketplace-health-check.ts` (Bun + TypeScript, per the repo's script rule); if Bun is missing it
+emits a one-line nudge to run the `install-bun` skill instead of erroring. On session start the check
+speaks **only when this marketplace won't stay current on its own** — Claude Code with `autoUpdate`
+off, or a Codex `source_type = "local"` (non-git) install — injecting a one-line nudge to run the
+`enable-autoupdate` skill. When auto-update is active (Claude Code `autoUpdate` on, or a Codex git
+marketplace) it stays **silent**. It detects the host from where the plugin is installed, is
+local-only (no network), non-blocking, and degrades quietly to silence if a file or tool is missing.

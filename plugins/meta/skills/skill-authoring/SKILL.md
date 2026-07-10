@@ -54,6 +54,12 @@ sets your defaults — knowledge leads with prose + references, a task skill lea
 workflow skill leads with its ordered steps and a TODO list — so the structure guidance below (§2)
 applies *through* the lens of the kind you picked.
 
+The kinds also **compose into a layered library**: a basic per-tool knowledge skill (e.g. `github`) is
+the foundation, a task skill (`create-pr`) builds on it, and a workflow skill (`review-pr`) orchestrates
+several — skills reference each other **by name** (they resolve across the installed set). So grow a
+library of small, composable skills rather than one monolith — the God Skill (§6) is what you get
+when you don't.
+
 ## When to use this skill
 
 - Writing a new skill, or turning a repeated workflow into one.
@@ -145,6 +151,11 @@ Optimise for the distribution of prompts you'll never see, not your three demo p
   should-trigger/should-not). Five examples that teach the same thing are four too many.
 - Add **graceful degradation**: say what to do when the primary path fails ("if the endpoint is
   unreachable, fall back to the cache and say so").
+- **Match freedom to fragility.** Generality is for *judgment*; the inverse holds for **fragile,
+  irreversible** operations — a prod migration, a deploy, a destructive command. There, give the
+  **exact** command (`run exactly: pnpm migrate --env prod`), not a paraphrase like "migrate as
+  appropriate." Don't let "encode intent, not keystrokes" talk you out of precision where a wrong
+  guess can't be undone.
 
 ```
 Overfit: When the user uploads sales_q4.xlsx, pivot by region and rep.
@@ -183,6 +194,7 @@ checklist, or a reference). Without a way to check the output, a skill is just v
 | **Script Nobody Runs** | useful helper ignored                            | make it explicit/required: "after editing, run `scripts/validate.py`; fix failures before responding" |
 | **Black Box Script**   | bundled script fails silently                    | verbose, LLM-readable stdout/stderr                                                                   |
 | **Lint Leakage**       | restates Prettier/ESLint/TS rules                | say which command to run + what a failure means; don't restate the rulebook                           |
+| **Setup Bloat**        | inlines `brew/npm install …` + env setup steps   | assume the tools are installed; move install/setup to a reference the agent reads only *on failure*   |
 | **Rotten Date**        | silently wrong over time                         | isolate volatile facts, stamp "verified as of …", tell the agent to re-check when freshness matters   |
 | **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or make it user-invocable only — _a skill may be powerful; it must not be sneaky_      |
 

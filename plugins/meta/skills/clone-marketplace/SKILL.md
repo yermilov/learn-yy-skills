@@ -53,9 +53,10 @@ bun run scripts/clone-marketplace.ts --new ./my-skills --name my-skills \
 ```
 
 Produces, at `./my-skills`, a ready-to-push marketplace: both `marketplace.json` manifests naming
-your marketplace and listing `meta`; `plugins/meta/` copied verbatim from upstream latest;
-`CLAUDE.md` (upstream's repo guide, renamed to your marketplace) + an `AGENTS.md` symlink to it; a
-starter `README.md`; an MIT `LICENSE` in the owner's name; and `git init` + an initial stage.
+your marketplace and listing `meta`; `plugins/meta/` copied verbatim from upstream latest (its
+SessionStart health hook retargeted to your marketplace's name, so it watches yours); `CLAUDE.md`
+(upstream's repo guide, renamed to your marketplace) + an `AGENTS.md` symlink to it; a starter
+`README.md`; an MIT `LICENSE` in the owner's name; and `git init` + an initial stage.
 
 Then the **human follow-ups** (the script prints them):
 1. Create the GitHub repo (e.g. `gh repo create <owner>/my-skills --public`) — pick the owner/repo
@@ -73,6 +74,11 @@ Refreshes an existing marketplace repo **in place**:
 - Replaces `plugins/meta/` with upstream's latest — so it picks up new meta skills, the cross-host
   SessionStart hook, doc fixes, and the version bump that ships with them. **Your other plugins are
   left untouched.**
+- **Retargets the copied SessionStart health hook to YOUR marketplace** — the hook's self-identity
+  (the `MARKETPLACE` const in its `.ts` + the `[<name>]` prefix in its Bun-missing nudge) is rewritten
+  from the source's name to your marketplace's `name`, so the hook watches the marketplace it's
+  installed in, not the one it was cloned from. Every other mention of the source (the `--source`
+  URL, plugin-dev's worked examples) legitimately points at the canonical upstream and is left as-is.
 - Ensures the shared-guide scaffolding exists: adds `CLAUDE.md` (renamed to your marketplace) and the
   `AGENTS.md` symlink **only if missing** — it never clobbers a `CLAUDE.md` you've customised.
 

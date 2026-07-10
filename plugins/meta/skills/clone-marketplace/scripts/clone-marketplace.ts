@@ -136,8 +136,55 @@ try {
   const metaDescription: string = upstreamManifest.description ?? '';
   say(`upstream meta plugin version: ${upstreamVersion}`);
 
+  // The source marketplace's own name (e.g. "learn-yy-skills"), read from its manifest rather
+  // than hard-coded — it's the token the copied meta's SessionStart health hook self-identifies
+  // with, and what we retarget to the destination below.
+  const upstreamName: string = (() => {
+    try {
+      return (
+        JSON.parse(readFileSync(join(upstream, '.claude-plugin/marketplace.json'), 'utf8')).name ?? ''
+      );
+    } catch {
+      return '';
+    }
+  })();
+
   const renamedClaudeMd = (toName: string) =>
     readFileSync(join(upstream, 'CLAUDE.md'), 'utf8').replaceAll('learn-yy-skills', toName);
+
+  // Retarget the copied meta's SessionStart health hook to the DESTINATION marketplace, so it
+  // watches the marketplace it's installed in — not the canonical source it was cloned from.
+  // Rewrites ONLY the two self-identity tokens, never a blanket name-replace: a blanket replace
+  // would corrupt hook internals if the SOURCE marketplace's name happened to be a substring of
+  // them (e.g. a `--source` named "codex" would maul `codexSourceType` / `/.codex/`). Every other
+  // mention of the source in meta — the --source URL, the plugin-dev/clone-marketplace doc
+  // examples — legitimately points at the canonical upstream and is left untouched.
+  const retargetMetaHooks = (metaDir: string, toName: string): void => {
+    if (!upstreamName || upstreamName === toName) return;
+    let changed = false;
+    // .ts — the `const MARKETPLACE = '<name>';` self-identity assignment (matched structurally,
+    // so it's robust to whatever the source name is).
+    const tsHook = join(metaDir, 'hooks/scripts/marketplace-health-check.ts');
+    if (existsSync(tsHook)) {
+      const src = readFileSync(tsHook, 'utf8');
+      const out = src.replace(/(const MARKETPLACE = ')[^']*(';)/, `$1${toName}$2`);
+      if (out !== src) {
+        writeFileSync(tsHook, out);
+        changed = true;
+      }
+    }
+    // .sh — only the `[<name>]` prefix in the Bun-missing nudge text.
+    const shHook = join(metaDir, 'hooks/scripts/marketplace-health-check.sh');
+    if (existsSync(shHook)) {
+      const src = readFileSync(shHook, 'utf8');
+      const out = src.replaceAll(`[${upstreamName}]`, `[${toName}]`);
+      if (out !== src) {
+        writeFileSync(shHook, out);
+        changed = true;
+      }
+    }
+    if (changed) say(`retargeted meta SessionStart health hook to '${toName}'`);
+  };
 
   if (mode === 'new') {
     if (!name) die('--new requires --name <marketplace-name> (kebab-case)');
@@ -157,6 +204,9 @@ try {
     });
     run(`cp -R plugins/meta → ${target}/plugins/meta`, () =>
       cpSync(join(upstream, 'plugins/meta'), join(target, 'plugins/meta'), { recursive: true }),
+    );
+    run(`retarget meta health hook → ${name}`, () =>
+      retargetMetaHooks(join(target, 'plugins/meta'), name),
     );
 
     if (!dryRun) {
@@ -220,12 +270,17 @@ try {
     run(`cp -R plugins/meta → ${target}/plugins/meta`, () =>
       cpSync(join(upstream, 'plugins/meta'), join(target, 'plugins/meta'), { recursive: true }),
     );
+    // The destination's own marketplace name — the target repo always has this manifest (checked
+    // above), so it's readable on a dry-run too.
+    const tgtName: string =
+      JSON.parse(readFileSync(join(target, '.claude-plugin/marketplace.json'), 'utf8')).name ??
+      'marketplace';
+    run(`retarget meta health hook → ${tgtName}`, () =>
+      retargetMetaHooks(join(target, 'plugins/meta'), tgtName),
+    );
 
     if (!dryRun) {
       if (!existsSync(join(target, 'CLAUDE.md'))) {
-        const tgtName =
-          JSON.parse(readFileSync(join(target, '.claude-plugin/marketplace.json'), 'utf8')).name ??
-          'marketplace';
         writeFileSync(join(target, 'CLAUDE.md'), renamedClaudeMd(tgtName));
         say('added CLAUDE.md (was missing)');
       }

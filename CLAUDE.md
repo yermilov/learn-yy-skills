@@ -29,6 +29,24 @@ both hosts accept (e.g. a SessionStart hook whose script emits the cross-host
 genuinely impossible on a host, gate just that step and keep the rest portable. Full guidance lives in
 the `skill-authoring` skill (§9) and `plugin-dev`.
 
+## Scripts: Bun + TypeScript
+
+Write **every executable this repo ships** — hook scripts, skill `scripts/`, and repo tooling — in
+**Bun + TypeScript** (`.ts` run with `bun`), not shell. One runtime + a typed language keeps the
+scripts consistent, testable, and safe to refactor.
+
+- **Skill / tooling scripts:** a `.ts` invoked with `bun run <path>` (or a `#!/usr/bin/env bun`
+  shebang + `chmod +x`). Take config via flags/args; read secrets from the environment, never
+  hard-code them (the repo is public).
+- **Hook scripts** run on the **consumer's** machine at session start, so: (a) the hook command
+  invokes Bun — `"command": "bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/<name>.ts\""` — and (b) it
+  must **degrade to a clean no-op when Bun (or anything it needs) is missing** — produce no output
+  and exit 0 rather than error. A hook must never break the session that loads it. Note the tradeoff:
+  a Bun+TS hook only shows its output where Bun is installed, unlike a POSIX-shell hook that runs
+  anywhere — that's the price of the typed toolchain, accepted deliberately here.
+
+(Any shell scripts that predate this rule should be converted to Bun + TypeScript when next touched.)
+
 ## Review every commit against the meta plugin
 
 Before **each commit** to this repo, review the full change set against the instructions in the

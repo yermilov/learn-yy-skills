@@ -1,6 +1,6 @@
 ---
 name: marketplace-health
-description: Check whether an installed Claude Code plugin marketplace is HEALTHY — (1) the latest published version of each plugin is actually installed (not a stale cached copy), and (2) auto-update is enabled so it stays current. Use when the user asks "is my marketplace up to date / am I on the latest?", "why didn't my new skill/plugin show up after I pushed?", "are plugin auto-updates on?", "check marketplace health", "did my marketplace update", or after publishing a plugin change to confirm clients will pull it — «чи оновлений маркетплейс», «чому не підтягнулась нова версія скіла», «увімкнені авто-апдейти плагінів». Do not use to AUTHOR a marketplace/plugin or bump versions (that's plugin-dev) — this only diagnoses an already-installed one.
+description: Check whether an installed plugin marketplace — on Claude Code or Codex — is HEALTHY — (1) the latest published version of each plugin is actually installed (not a stale cached copy), and (2) auto-update is active so it stays current (Claude Code's extraKnownMarketplaces.autoUpdate flag, or a Codex git vs local source_type). Use when the user asks "is my marketplace up to date / am I on the latest?", "why didn't my new skill/plugin show up after I pushed?", "are plugin auto-updates on?", "check marketplace health", "did my marketplace update", "is my Codex marketplace current?", or after publishing a plugin change to confirm clients will pull it — «чи оновлений маркетплейс», «чому не підтягнулась нова версія скіла», «увімкнені авто-апдейти плагінів». Do not use to AUTHOR a marketplace/plugin or bump versions (that's plugin-dev) — this only diagnoses an already-installed one.
 ---
 
 # Marketplace health check
@@ -99,12 +99,24 @@ The per-marketplace toggle lives in **settings.json** under
 
 ## Codex
 
-**Verify at runtime — do not assume Claude Code's commands work.** Codex reads
-its own `.agents/plugins/marketplace.json` and has no documented equivalent of
-`claude plugin marketplace …` or the `extraKnownMarketplaces.autoUpdate`
-setting. If asked to health-check a marketplace on Codex, say plainly that the
-Claude Code mechanism above doesn't transfer, and inspect what Codex actually
-exposes (its plugin cache / config) rather than inventing a flag.
+The two questions still apply, but the mechanism differs — **verify commands with
+`--help`, the CLI surface moves.** Codex tracks marketplaces in
+`~/.codex/config.toml` under `[marketplaces.<name>]` (fields: `source_type`,
+`source`, `last_updated`, `last_revision`) and caches installed plugins at
+`~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`.
+
+- **Latest version installed?** Compare the cached `<version>` path segment against
+  what the source publishes. `codex plugin marketplace upgrade <name>` refreshes a
+  git marketplace's snapshot (then re-read the cache path). `codex plugin marketplace list`
+  enumerates what's configured.
+- **Auto-update?** There is **no `autoUpdate` flag** — Codex auto-updates
+  **git-sourced** marketplaces unconditionally. So `source_type = "git"` ⇒
+  auto-update is ON by construction; `source_type = "local"` ⇒ a pinned snapshot
+  that never self-updates (the enable-autoupdate skill covers the fix). Report the
+  verdict off `source_type`, not a boolean.
+
+Don't assume Claude Code's `claude plugin …` commands or the
+`extraKnownMarketplaces.autoUpdate` setting exist on Codex — they don't.
 
 ## When to act (not just report)
 

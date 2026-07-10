@@ -200,6 +200,14 @@ unit**: Claude Code, Codex, and Cowork all read the same `name` + `description` 
 Portability is mostly (a) not baking one host's assumptions into the body, and (b) shipping the
 wrapper each host expects.
 
+**Default: make every skill work on BOTH Claude Code and Codex** — treat single-host as the exception
+you must justify, not the starting point. Only fork or drop a host when a step is genuinely
+impossible there (it needs a capability that host lacks with no reasonable fallback), and even then
+**gate just that step** (§ "Gate what isn't universal") and keep the rest portable rather than
+abandoning the skill. Same for the hosts' non-skill surfaces (hooks, manifests): prefer the one
+artifact that both accept — e.g. a hook script emitting the cross-host
+`{"hookSpecificOutput":{...}}` JSON both hosts understand — over a Claude-only build.
+
 **Write the body host-agnostic.**
 
 - **Name capabilities, not tools.** Say "the shell", "the browser", "a subagent" — not one host's

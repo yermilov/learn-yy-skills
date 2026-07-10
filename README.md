@@ -14,7 +14,7 @@ It ships as a **dual marketplace** so one source serves both hosts:
 
 | Plugin | What it is |
 | --- | --- |
-| **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), `marketplace-health` (checking an installed marketplace is current and auto-updating), and `enable-autoupdate` (turning that auto-update on). Also ships a Claude Code `SessionStart` hook that surfaces a marketplace-health banner at session start. |
+| **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), `marketplace-health` (checking an installed marketplace is current and auto-updating, on Claude Code or Codex), and `enable-autoupdate` (keeping it current on either host). Also ships a cross-host `SessionStart` hook (Claude Code + Codex) that nudges at session start only when the marketplace's auto-update is off. |
 
 ## Install
 

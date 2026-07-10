@@ -1,20 +1,23 @@
 ---
 name: enable-autoupdate
-description: Turn ON auto-update for an installed Claude Code plugin marketplace so it stays current on its own — sets extraKnownMarketplaces.<name>.autoUpdate=true in settings.json (or points the user at the /plugin UI toggle). Use when the user asks to "enable/turn on marketplace auto-updates", "keep my plugins up to date automatically", "stop my marketplace going stale", "make learn-yy-skills auto-update", or right after marketplace-health reports auto-update OFF — «увімкни авто-апдейт маркетплейсу», «хай плагіни оновлюються самі». This is the ACTION counterpart to marketplace-health (which only diagnoses); do not use it to check status, nor to author/version a marketplace (that is plugin-dev).
+description: Turn ON auto-update for an installed plugin marketplace — Claude Code or Codex — so it stays current on its own. On Claude Code, set extraKnownMarketplaces.<name>.autoUpdate=true in settings.json (or the /plugin UI toggle); on Codex, git-sourced marketplaces already auto-update, so the fix for a stale one is re-adding it from its Git source or running `codex plugin marketplace upgrade`. Use when the user asks to "enable/turn on marketplace auto-updates", "keep my plugins up to date automatically", "stop my marketplace going stale", "make learn-yy-skills auto-update", or right after marketplace-health reports auto-update OFF — «увімкни авто-апдейт маркетплейсу», «хай плагіни оновлюються самі». This is the ACTION counterpart to marketplace-health (which only diagnoses); do not use it to check status, nor to author/version a marketplace (that is plugin-dev).
 ---
 
 # Enable marketplace auto-update
 
-Flip a Claude Code plugin marketplace from "pinned to whatever was installed" to
-"keeps itself current". One setting controls it —
-`extraKnownMarketplaces.<marketplace-name>.autoUpdate` in **settings.json** — and
-third-party marketplaces default to **off**, so this is the switch that stops the
-"I pushed a new skill and nobody sees it" problem on the *consumer* side.
+Keep an installed plugin marketplace from going stale — stop the "I pushed a new
+skill and nobody sees it" problem on the *consumer* side. **The mechanism differs by
+host, so branch first:**
 
-Pair with **marketplace-health** to confirm the result: it reads the same flag
-back and reports ON/OFF.
+- **Claude Code** → one setting controls it: `extraKnownMarketplaces.<name>.autoUpdate`
+  in **settings.json** (third-party marketplaces default to **off**). Follow steps 1–4.
+- **Codex** → there's **no flag**; git-sourced marketplaces auto-update on their own.
+  Skip to the **Codex** section — the fix there is about the marketplace's *source*,
+  not a toggle.
 
-## 1. Identify the marketplace name
+Pair with **marketplace-health** to confirm the result.
+
+## 1. Identify the marketplace name (Claude Code)
 
 The name is the `name` field in the marketplace's `marketplace.json` (e.g.
 `learn-yy-skills`), and it's the key you'll write under `extraKnownMarketplaces`.
@@ -75,19 +78,41 @@ for the next auto-refresh, run `claude plugin marketplace update <name>` once.
 
 ## Codex
 
-**No documented equivalent.** `extraKnownMarketplaces.autoUpdate` is a Claude Code
-setting; Codex reads its own `.agents/plugins/marketplace.json` and exposes no
-matching auto-update toggle. If asked to enable auto-update on Codex, say so
-plainly and inspect what Codex's own config actually offers rather than inventing a
-flag. (Codex *does* now have lifecycle hooks — a separate feature — but that is not
-a marketplace auto-update control.)
+Codex works differently: there is **no auto-update flag to set**, because Codex
+**auto-updates git-sourced marketplaces unconditionally** — a built-in background
+task keeps them current on its own. So "enabling" auto-update is about the
+marketplace's **source**, not a toggle. Detect and act by `source_type` in
+`~/.codex/config.toml` (`[marketplaces.<name>]`):
+
+- **`source_type = "git"`** → already auto-updating. Nothing to enable; the
+  Claude-Code `autoUpdate` action is a no-op here. To pull the newest revision
+  immediately: `codex plugin marketplace upgrade <name>` (omit the name to refresh
+  all git marketplaces).
+- **`source_type = "local"`** → a pinned local snapshot Codex will **never**
+  refresh (and `codex plugin marketplace upgrade` won't help — it refreshes only
+  **git** marketplaces). The fix is to re-add it from its **Git** source (e.g.
+  `codex plugin marketplace add <owner/repo>`) so it joins the auto-upgrade set. A
+  deliberate local dev checkout is expected to be updated by hand (git pull the
+  source); there is no auto-update for it.
+
+Verify any command with `--help` — the CLI surface moves. Don't invent an
+`autoUpdate` key in `config.toml`; it does not exist there.
 
 ## Output
 
-Lead with the one action and its effect:
+Lead with the one action and its effect, matched to the host:
 
 ```
+# Claude Code
 Marketplace <name> (<owner/repo>)
- → enable-autoupdate: set extraKnownMarketplaces.<name>.autoUpdate = true in <scope> settings.json
+ → set extraKnownMarketplaces.<name>.autoUpdate = true in <scope> settings.json
    (or /plugin → Marketplaces → enable auto-update). Now stays current automatically.
+
+# Codex — git source
+Marketplace <name> is git-sourced → Codex already auto-updates it. Nothing to enable.
+ → `codex plugin marketplace upgrade <name>` to pull the newest revision right now.
+
+# Codex — local source
+Marketplace <name> is a local (non-git) snapshot → Codex will never auto-update it.
+ → re-add it from its Git source (`codex plugin marketplace add <owner/repo>`) to make it self-update.
 ```

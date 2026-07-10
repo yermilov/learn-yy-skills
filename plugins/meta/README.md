@@ -14,22 +14,25 @@ itself. It ships four skills and a session-start hook:
   description/frontmatter that decides triggering, progressive-disclosure structure and length,
   writing style for an LLM reader, when to bundle scripts/references/assets, named anti-patterns,
   and how to make one skill portable across both Claude and Codex.
-- **marketplace-health** — diagnose an already-installed Claude Code marketplace: is the latest
-  published version of each plugin actually installed (vs a stale cached copy), and is auto-update
-  enabled so it stays current? Trigger on "am I on the latest?", "why didn't my new skill show up
-  after I pushed?", or "are plugin auto-updates on?".
-- **enable-autoupdate** — the action counterpart to marketplace-health: turn auto-update ON for an
-  installed marketplace (set `extraKnownMarketplaces.<name>.autoUpdate = true` in settings.json, or
-  the `/plugin` UI toggle) so it stays current on its own. Trigger on "enable/turn on marketplace
+- **marketplace-health** — diagnose an already-installed marketplace on **Claude Code or Codex**: is
+  the latest published version of each plugin actually installed (vs a stale cached copy), and is
+  auto-update active so it stays current? Trigger on "am I on the latest?", "why didn't my new skill
+  show up after I pushed?", or "are plugin auto-updates on?".
+- **enable-autoupdate** — the action counterpart to marketplace-health, on **both hosts**: on Claude
+  Code set `extraKnownMarketplaces.<name>.autoUpdate = true` (or the `/plugin` UI toggle); on Codex
+  git-sourced marketplaces already auto-update, so the fix for a stale one is re-adding it from its
+  Git source or `codex plugin marketplace upgrade`. Trigger on "enable/turn on marketplace
   auto-updates", "keep my plugins up to date automatically", or right after marketplace-health
   reports auto-update OFF.
 
 ## Session-start hook
 
-The plugin also ships a **Claude Code `SessionStart` hook** (`hooks/hooks.json` →
-`hooks/scripts/marketplace-health-check.sh`). On session start it injects a one-line
-marketplace-health banner into the session — the installed `meta` version and whether auto-update is
-enabled — so the agent can flag a stale or un-auto-updating install without being asked. It is
-local-only (no network), non-blocking, and degrades quietly if a file or tool is missing. Codex has
-since grown its own lifecycle hooks (a session-start hook among them), so a Codex equivalent is
-possible; this plugin wires only the Claude Code side for now.
+The plugin also ships a **cross-host `SessionStart` hook** (`hooks/hooks.json` →
+`hooks/scripts/marketplace-health-check.sh`) that runs on **both Claude Code and Codex** (both
+auto-discover `hooks/hooks.json` and set `CLAUDE_PLUGIN_ROOT`; the script emits the cross-host
+`{"hookSpecificOutput":{…}}` JSON both accept). On session start it speaks **only when this
+marketplace won't stay current on its own** — Claude Code with `autoUpdate` off, or a Codex
+`source_type = "local"` (non-git) install — injecting a one-line nudge to run the `enable-autoupdate`
+skill. When auto-update is active (Claude Code `autoUpdate` on, or a Codex git marketplace) it stays
+**silent**. It detects the host from the SessionStart payload, is local-only (no network),
+non-blocking, and degrades quietly to silence if a file or tool is missing.

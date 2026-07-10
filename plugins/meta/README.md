@@ -1,7 +1,7 @@
 # meta
 
 The **meta** plugin for the `learn-yy-skills` marketplace — the tooling for building the marketplace
-itself. It ships four skills and a session-start hook:
+itself. It ships five skills and a session-start hook:
 
 ## Skills
 
@@ -24,6 +24,13 @@ itself. It ships four skills and a session-start hook:
   Git source or `codex plugin marketplace upgrade`. Trigger on "enable/turn on marketplace
   auto-updates", "keep my plugins up to date automatically", or right after marketplace-health
   reports auto-update OFF.
+- **clone-marketplace** — bootstrap a **new** marketplace repo (or bring an existing one up to date)
+  from this marketplace's structure + meta plugin, always fetched from **GitHub at the latest
+  version**. Ships a `clone-marketplace.sh` script: `--new` scaffolds a fresh repo (both marketplace
+  manifests, the meta plugin, CLAUDE.md/AGENTS.md, README, MIT LICENSE, git init); `--update`
+  refreshes an existing repo's meta plugin + scaffolding in place, leaving your own plugins untouched.
+  Trigger on "create/start my own skills marketplace", "clone a marketplace like this one", or "update
+  my marketplace's meta plugin to the latest".
 
 ## Session-start hook
 

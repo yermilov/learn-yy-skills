@@ -1,0 +1,36 @@
+{
+  "name": "home-it",
+  "version": "0.1.0",
+  "description": "Home IT skills. Ships check-network: a repeatable playbook to diagnose a slow home network end-to-end (measure throughput / bufferbloat / packet loss / Wi-Fi signal from the affected device, localize the bottleneck across ISP plan → router → Wi-Fi path → client, inspect the router admin UI) and rank fixes — wired backhaul first, a second wireless extender never. The same SKILL.md files back the Claude Code plugin.",
+  "author": {
+    "name": "Yaroslav Yermilov",
+    "email": "yermilov17@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "home-it",
+    "network",
+    "wifi",
+    "diagnostics",
+    "bufferbloat",
+    "router",
+    "mesh",
+    "isp"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Home IT",
+    "shortDescription": "Diagnose and speed up a slow home network",
+    "longDescription": "Home IT skills for the learn-yy-skills marketplace. check-network is a repeatable playbook for a slow home network: measure from the affected device (throughput, idle-vs-loaded latency/bufferbloat, packet loss to the gateway, Wi-Fi signal and negotiated rate), localize the bottleneck across four layers — ISP plan, router, Wi-Fi path, client — inspect the router admin UI (QoS, band steering, channel, mesh/EasyMesh backhaul), then recommend fixes ranked by leverage: wired backhaul first, relocation and channel tuning next, a new router only if needed, and a second wireless extender never. The same SKILL.md files back the Claude Code plugin.",
+    "developerName": "Yaroslav Yermilov",
+    "category": "Productivity",
+    "capabilities": [
+      "Bash",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "My home Wi-Fi is slow at my desk — can we make it faster?",
+      "Should I buy an extender or a new router?"
+    ]
+  }
+}

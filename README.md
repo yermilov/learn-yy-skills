@@ -15,6 +15,7 @@ It ships as a **dual marketplace** so one source serves both hosts:
 | Plugin | What it is |
 | --- | --- |
 | **meta** | The marketplace's own tooling — skills for building and running a skills marketplace: `plugin-dev` (repo layout, dual-manifest packaging, version discipline), `skill-authoring` (writing Agent Skills that trigger reliably and stay lean), `marketplace-health` (checking an installed marketplace is current and auto-updating, on Claude Code or Codex), `enable-autoupdate` (keeping it current on either host), `clone-marketplace` (bootstrap a new marketplace, or update an existing one's meta plugin, from the latest on GitHub), and `install-bun` (install the Bun runtime the marketplace's Bun + TypeScript scripts and hook run on). Also ships a cross-host `SessionStart` hook (Claude Code + Codex) that nudges at session start only when the marketplace's auto-update is off. |
+| **home-it** | Practical playbooks for the tech in your home. `check-network` diagnoses a slow home network end-to-end — measures from the affected device (throughput, idle-vs-loaded latency / bufferbloat, packet loss, Wi-Fi signal), localizes the bottleneck across ISP plan → router → Wi-Fi path → client, inspects the router admin UI, then ranks fixes by leverage: wired backhaul first, a second wireless extender never. |
 
 ## Install
 

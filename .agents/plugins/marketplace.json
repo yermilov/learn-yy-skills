@@ -16,6 +16,19 @@
       },
       "category": "Productivity",
       "description": "How to build a great skills marketplace and its plugins (plugin-dev): repo layout, the Claude + Codex dual-manifest packaging, version discipline, and what makes a plugin/skill worth installing. The same SKILL.md files back the Claude Code plugin."
+    },
+    {
+      "name": "home-it",
+      "source": {
+        "source": "local",
+        "path": "./plugins/home-it"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "description": "Home IT skills. check-network: a repeatable playbook to diagnose a slow home network end-to-end (measure throughput / bufferbloat / packet loss / Wi-Fi signal, localize the bottleneck across ISP plan → router → Wi-Fi path → client, inspect the router UI) and rank fixes — wired backhaul first, a second wireless extender never. The same SKILL.md files back the Claude Code plugin."
     }
   ]
 }

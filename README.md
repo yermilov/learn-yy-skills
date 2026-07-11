@@ -1,3 +1,5 @@
+![A bustling Aladdin-style bazaar of AI-agent skills — with a couple of Clawds hiding among the stalls](assets/marketplace-banner.jpg)
+
 # learn-yy-skills
 
 **Yaroslav Yermilov's public marketplace of AI-agent skills** — an installable collection of Claude

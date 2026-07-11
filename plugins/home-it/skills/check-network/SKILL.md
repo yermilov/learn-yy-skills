@@ -42,9 +42,9 @@ between the two is the single most diagnostic number you'll get.
 - **Client sanity:** interface error counters (`netstat -i` / `ifconfig`), and confirm no per-device
   throttle in the router app. Rule the device out before blaming it.
 
-Record numbers for each spot. Example of a real "slow desk vs near router" split from this playbook's
-reference case: desk Wi-Fi **75–190 Mbps, ~5% loss to router, RSSI −65 to −68 dBm**; moved next to the
-router **~600–620 Mbps, 0% loss, RSSI −20 dBm**. That gap *is* the diagnosis — the internal Wi-Fi
+Record numbers for each spot. The **gap between "at the desk" and "next to the router" is itself the
+diagnosis**: if throughput jumps from a low figure with weak RSSI and some packet loss at the desk to
+near-plan speed with strong RSSI and 0% loss beside the router, the bottleneck is the internal Wi-Fi
 path, not the ISP.
 
 ## 2. Localize the bottleneck
@@ -61,14 +61,14 @@ path, not the ISP.
 
 ## 3. Inspect the router admin UI
 
-Log into the router (browser, default `http://192.168.0.1` or the vendor host, e.g.
-`http://tplinkwifi.net`). **Read-only first**; only change settings with the user's OK, one at a time,
-re-measuring after each. Check:
+Log into the router (browser, default `http://192.168.0.1` / `http://192.168.1.1`, or the vendor host
+printed on the router's label). **Read-only first**; only change settings with the owner's OK, one at
+a time, re-measuring after each. Check:
 
 - **QoS / bandwidth control** — off, or not throttling the device? (A stray cap here explains a lot.)
 - **Band steering / Smart Connect** — on by default; toggling rarely helps much, but worth an A/B.
 - **Channel & width** — Auto is usually fine; a fixed clear channel occasionally helps in RF-dense
-  areas, but test it (in the reference case fixed channels gave *no* improvement — don't assume).
+  areas, but test it — often it makes no measurable difference, so don't assume.
 - **Mesh / EasyMesh** — note every satellite node, its IP, and how many clients hang off it, and
   **whether its backhaul is wireless or wired**. Wireless backhaul is the top suspect.
 - **MTU / NAT boost / hardware accel** — confirm MTU 1500 (unless PPPoE) and HW acceleration on.
@@ -91,20 +91,17 @@ Rank fixes by leverage, not by novelty:
    only a **wired** or tri-band-dedicated-backhaul node is worth adding.
 
 Then: name the specific cable/adapter/switch if hardware is needed (with a couple of price points),
-give expected before/after numbers, and confirm the user's appetite (many will happily stop at "good
-enough" — e.g. 500 Mbps on a gigabit plan — rather than chase the theoretical max; respect that).
+give expected before/after numbers, and confirm the person's appetite — many will happily stop at
+"good enough" rather than chase the theoretical maximum, and that's a valid place to stop.
 
-## Reference setup (this playbook's proven case)
+## A worked shape (generic)
 
-- **ISP:** Lucky Net, ~1 Gbit residential (top public tier) — **not** the bottleneck.
-- **Router:** TP-Link **Archer C64** — Wi-Fi 5 / AC1200, ~867 Mbps 5 GHz, gigabit ports, EasyMesh.
-- **Extender:** TP-Link **RE505X** — Wi-Fi 6 / AX1500, **has a gigabit Ethernet port + Access Point
-  mode** (so it becomes a wired AP with no new hardware). Was running as a *wireless* mesh node — the
-  bottleneck.
-- **Client:** MacBook (USB-C only, no RJ45 → needs a USB-C→Gigabit adapter to go wired).
-- **Verdict (unanimous across a two-model review):** wired backhaul with the RE505X in AP mode is the
-  #1 fix (~600–800 Mbps expected at the desk); adding a second wireless extender ranked dead last.
-  User was satisfied stopping at ~500 Mbps over Ethernet.
+A common real-world case: a gigabit plan, a Wi-Fi 5 (AC1200) main router, and a **wirelessly-
+backhauled** Wi-Fi 6 extender near the desk. Measurement shows low throughput + weak signal + packet
+loss at the desk but near-plan speed beside the router → the extender's wireless hop is halving
+bandwidth. The #1 fix is almost always to **wire the extender's backhaul** (put it in Access Point
+mode on an Ethernet run) or wire the client directly — not to add a second wireless extender, which
+ranks last. Many extenders already have a gigabit port + AP mode, so the fix often costs only a cable.
 
 ## Anti-patterns
 

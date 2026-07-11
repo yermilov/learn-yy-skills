@@ -29,6 +29,17 @@ both hosts accept (e.g. a SessionStart hook whose script emits the cross-host
 genuinely impossible on a host, gate just that step and keep the rest portable. Full guidance lives in
 the `skill-authoring` skill (§9) and `plugin-dev`.
 
+## Keep skills generic — no personal data
+
+This is a **public** marketplace: every skill must be generic and reusable by anyone. **Never bake in
+the author's personal or private specifics** — real ISP / vendor / hardware model names tied to one
+person's setup, home or network layout, account or address details, measurements taken at one
+location, names, or any identifying data. Teach the *method* with generic, illustrative examples
+instead ("a gigabit plan behind a Wi-Fi 5 router", not a named product someone owns). If a skill grew
+out of a concrete personal case, **strip it down to the reusable pattern before publishing** — keep
+the lesson, drop the identifying particulars. Personal context belongs in your own private notes, not
+in a shipped skill.
+
 ## Scripts: Bun + TypeScript
 
 Write **every executable this repo ships** — hook scripts, skill `scripts/`, and repo tooling — in

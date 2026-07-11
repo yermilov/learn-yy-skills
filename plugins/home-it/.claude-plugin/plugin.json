@@ -1,6 +1,6 @@
 {
   "name": "home-it",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Home IT skills. Ships check-network: a repeatable playbook to diagnose a slow home network end-to-end (measure throughput / bufferbloat / packet loss / Wi-Fi signal from the affected device, localize the bottleneck across ISP plan → router → Wi-Fi path → client, inspect the router admin UI) and rank fixes — wired backhaul first, a second wireless extender never. The same SKILL.md files back the Claude Code plugin.",
   "author": {
     "name": "Yaroslav Yermilov",

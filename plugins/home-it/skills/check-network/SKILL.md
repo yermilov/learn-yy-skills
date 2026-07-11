@@ -30,21 +30,30 @@ The four layers, outermost to innermost:
 Run these **where the problem is** (e.g. at the desk), then repeat **next to the router** — the gap
 between the two is the single most diagnostic number you'll get.
 
-- **Throughput + bufferbloat (macOS):** `networkQuality -v`. Read *both* the Mbps **and** the
-  "Responsiveness" — a Low/So-so responsiveness or a big idle-vs-loaded latency jump is **bufferbloat**,
-  which wrecks calls and browsing even when Mbps looks fine. (Linux/Windows: a browser speed test that
-  reports loaded latency, e.g. Cloudflare/Waveform bufferbloat test.)
-- **Packet loss & latency:** `ping -c 100 <gateway>` (default `192.168.0.1`/`192.168.1.1`) and
-  `ping -c 100 1.1.1.1`. **Any loss to your own gateway = a Wi-Fi/local problem**, not the ISP.
-- **Wi-Fi link quality (macOS):** signal (RSSI; better than −60 dBm is good, worse than −67 is weak)
-  and the **negotiated Tx rate** — a Wi-Fi 6 client stuck at an 802.11ac rate or a low Tx rate means
-  distance/interference, not a dead plan.
-- **Client sanity:** interface error counters (`netstat -i` / `ifconfig`), and confirm no per-device
-  throttle in the router app. Rule the device out before blaming it.
+The tools differ per OS but the four measurements are the same everywhere (macOS / Windows / Linux):
+
+- **Throughput + bufferbloat.** What matters is whether latency **spikes under load** (bufferbloat),
+  not just raw Mbps — a big idle-vs-loaded latency jump wrecks calls and browsing even when Mbps looks
+  fine. *macOS:* `networkQuality -v` (reports Mbps + a "Responsiveness" score). *Windows / Linux* (no
+  built-in equivalent): a browser test that reports **loaded** latency — `speed.cloudflare.com` or
+  `waveform.com/bufferbloat` — or the cross-platform Ookla `speedtest` CLI for throughput.
+- **Packet loss & latency.** *macOS / Linux:* `ping -c 100 <gateway>` and `ping -c 100 1.1.1.1`.
+  *Windows:* `ping -n 100 <gateway>` and `ping -n 100 1.1.1.1`. (Gateway is usually
+  `192.168.0.1`/`192.168.1.1` — find it with `ipconfig` on Windows, `ip route` / `netstat -nr`
+  elsewhere.) **Any loss to your own gateway = a Wi-Fi/local problem**, not the ISP.
+- **Wi-Fi link quality (signal + negotiated rate).** *Windows:* `netsh wlan show interfaces` → Signal
+  (%), Receive/Transmit rate, Radio type, Channel. *macOS:* ⌥-click the Wi-Fi menu, or `wdutil info` →
+  RSSI (dBm) + Tx rate. *Linux:* `iw dev <iface> link` or `nmcli dev wifi` → signal (dBm) + bitrate.
+  Read the **signal** (RSSI better than −60 dBm good, worse than −67 weak; on Windows's % scale, >70%
+  is good) and whether the **negotiated rate** sits far below the AP's max — a Wi-Fi 6 client stuck at
+  an 802.11ac / low rate means distance or interference, not a dead plan.
+- **Client sanity.** Interface error counters — *macOS / Linux:* `netstat -i` or `ip -s link`;
+  *Windows:* `netstat -e` or PowerShell `Get-NetAdapterStatistics`. Confirm no per-device throttle in
+  the router app. Rule the device out before blaming it.
 
 Record numbers for each spot. The **gap between "at the desk" and "next to the router" is itself the
-diagnosis**: if throughput jumps from a low figure with weak RSSI and some packet loss at the desk to
-near-plan speed with strong RSSI and 0% loss beside the router, the bottleneck is the internal Wi-Fi
+diagnosis**: if throughput jumps from a low figure with weak signal and some packet loss at the desk to
+near-plan speed with strong signal and 0% loss beside the router, the bottleneck is the internal Wi-Fi
 path, not the ISP.
 
 ## 2. Localize the bottleneck

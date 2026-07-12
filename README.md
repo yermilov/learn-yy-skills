@@ -43,11 +43,17 @@ update learn-yy-skills`) to pull the latest.
 
 ### Codex
 
-Codex reads `.agents/plugins/marketplace.json`. Add this repo as a plugin marketplace in your Codex
-client and install **meta** from its Directory. Point it at the repo
-(`yermilov/learn-yy-skills` / `https://github.com/yermilov/learn-yy-skills`); the exact command
-depends on your Codex version — see your Codex plugin/marketplace docs. Once added, the plugin's
-skills are available the same way as any Codex plugin.
+Don't look up a command — **just launch Codex and ask it to install the plugin**. It knows how to do
+this on its own, and unlike a fixed command, the request doesn't go stale when the Codex plugin CLI
+changes:
+
+```
+Install the plugin marketplace https://github.com/yermilov/learn-yy-skills and install the meta plugin from it.
+```
+
+Codex reads [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json), so everything it
+needs is already in the repo. Once it's in, the plugin's skills are available like any other Codex
+plugin — and ask it the same way to install another plugin (`home-it`) or to pull updates later.
 
 ### Individual skills (`npx skills`)
 

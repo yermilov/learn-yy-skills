@@ -98,6 +98,15 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
 - **Trigger-test it:** list ~10 prompts that _should_ fire and ~10 that _shouldn't_ (include typos,
   slang, indirect phrasings, and near-misses that share a keyword). If the description can't separate
   them, rewrite it.
+- **There is a hard ceiling: keep the description under 1024 characters.** Codex's plugin loader caps
+  it there, so a longer one doesn't just read badly — it risks being cut off, and the part that gets
+  cut is the tail, which is exactly where the `Do not use for…` boundary lives. Length is also a smell
+  on its own: a classifier that needs 1100 characters is usually listing everything the skill *can* do
+  instead of naming what should *trigger* it. Aim well under the cap (most good ones land at 500–900);
+  if you're near it, cut capability prose, not triggers or the boundary. Audit the whole marketplace in
+  one line: `for f in plugins/*/skills/*/SKILL.md; do …` — extract `description:` and print its length.
+  (Found the hard way: a shipped skill was sitting at 1124 chars; rewriting it as a classifier rather
+  than a capability list brought it to 904 with every trigger intact.)
 
 ## 2. Structure & progressive disclosure
 

@@ -21,7 +21,7 @@ its skills become available. The whole thing is plain files in git — no build 
 
 This skill is the prescriptive guide to structuring that repo so it (a) installs cleanly on **both**
 Claude and Codex from one source, and (b) reliably delivers updates. The `learn-yy-skills` repo this
-skill ships in is the worked example; `yermilov/juggernaut` is the larger reference.
+skill ships in is the worked example.
 
 ## The one job
 

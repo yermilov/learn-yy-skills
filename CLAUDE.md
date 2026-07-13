@@ -19,24 +19,11 @@ Adding a plugin or a skill has a **version-bump discipline** the marketplace aut
 the `plugin-dev` skill spells it out. In short: bump a plugin's `version` in **both** its manifests on
 any change, and bump the Claude marketplace's `metadata.version` whenever the plugin **list** changes.
 
-## ⚠️ The `meta` plugin is MIRRORED — this repo is the canonical copy
+## This repo is the canonical source of the `meta` plugin
 
-`plugins/meta/` also lives in the **juggernaut** marketplace (`~/src/juggernaut/plugins/meta/`), and
-**this repo is the source of truth**: `clone-marketplace` pulls the meta plugin *from here*, "from
-GitHub at the LATEST". Juggernaut's copy is therefore **derived**.
-
-So **any edit under `plugins/meta/**` must be made in BOTH repos, in the same change** — byte-identical
-content, and the **same version** in all four manifests (Claude + Codex, in each repo). Editing only one
-side is a silent-revert bug: touch juggernaut alone and the next `clone-marketplace --update` overwrites
-it from here; touch only here and juggernaut keeps serving the stale copy.
-
-The **only** lines that may legitimately differ are the two in
-`hooks/scripts/marketplace-health-check.{ts,sh}` where each marketplace names itself
-(`[juggernaut]` vs `[learn-yy-skills]`). Verify with:
-
-```bash
-diff -r ~/src/juggernaut/plugins/meta ~/src/learn-yy-skills/plugins/meta   # only those 2 lines
-```
+`clone-marketplace` fetches `plugins/meta/` **from here, from GitHub, at the latest version** — that is
+what other marketplaces bootstrap and update from. So an edit under `plugins/meta/**` is an edit to
+everyone's copy: bump the version in both manifests, and keep the content host-agnostic.
 
 ## Support both hosts (Claude Code + Codex)
 

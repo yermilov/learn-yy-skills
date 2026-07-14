@@ -1,15 +1,16 @@
 ---
 name: skill-authoring
 description: >-
-  Write, structure, and review great Agent Skills (SKILL.md files) so an agent reliably triggers and
-  follows them. Covers the description/frontmatter that decides triggering, the three kinds of skill
-  (knowledge / task / workflow), progressive-disclosure structure and length, writing style for an LLM
-  reader (constraint hierarchy over walls of ALL-CAPS), when to bundle scripts/references/assets, named
-  anti-patterns, how to eval a skill, and portability across both Claude and Codex (host-agnostic body
-  + dual-manifest packaging). Use when creating, writing, editing, improving, reviewing, shortening, or
-  debugging a skill / SKILL.md / plugin skill — when a skill won't trigger, is too long, or must work
-  on both Claude and Codex. Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
-  не тригериться», "write a skill", "make a SKILL.md", "my skill never triggers".
+  Write, structure, and review great Agent Skills (SKILL.md files) so an agent reliably triggers
+  and follows them. Covers the description/frontmatter that decides triggering, the three kinds of
+  skill (knowledge / task / workflow), progressive-disclosure structure, when to bundle
+  scripts/references/assets, named anti-patterns, how to eval a skill, and portability across both
+  Claude and Codex. Use when creating, writing, editing, improving, reviewing, shortening, or
+  debugging a skill / SKILL.md / plugin skill — when a skill won't trigger, is too long, or must
+  work on both hosts. Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
+  не тригериться», "write a skill", "make a SKILL.md", "my skill never triggers". Do not use for
+  plugin PACKAGING — manifests, version bumps, marketplace wiring, README tables (that is
+  plugin-dev); this skill is about the SKILL.md itself.
 ---
 
 # Skill authoring
@@ -93,6 +94,15 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   default failure is under-triggering, so lean toward inclusion.
 - **Add exactly one `Do not use for…`** line _only_ when a near-miss is likely. Don't enumerate every
   non-case — that's noise.
+- **Audit the marketplace for MISSING boundaries, not just for length — and include this skill in the
+  sweep.** Length has an obvious failure signal (the loader truncates); a missing boundary has none —
+  it fails silently, as a near-miss skill quietly winning the trigger. So grep the descriptions for
+  `/do not use for|not for\b/i` and count the misses the same way you count characters. Two things
+  that audit reliably turns up: (1) the *big* number — a marketplace typically has boundaries on a
+  minority of skills, so treat "no boundary" as the default defect, not the exception; and (2) the
+  embarrassing one — **the authoring skill itself shipped without a `Do not use for…` for months**
+  (near-miss: `plugin-dev`, same plugin, both about "skills and plugins"). A rule you only apply to
+  *other* skills isn't enforced, it's decorative. Audit yourself first.
 - **Write the description last,** once the body is stable: describe the behaviour you built, not the
   aspiration you started with.
 - **Trigger-test it:** list ~10 prompts that _should_ fire and ~10 that _shouldn't_ (include typos,

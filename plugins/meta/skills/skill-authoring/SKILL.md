@@ -94,6 +94,11 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   default failure is under-triggering, so lean toward inclusion.
 - **Add exactly one `Do not use for…`** line _only_ when a near-miss is likely. Don't enumerate every
   non-case — that's noise.
+- **A *mutual* near-miss needs a *reciprocal* boundary.** When two skills genuinely collide — both
+  plausibly fire on the same request (a symmetric pair, e.g. two same-plugin "refresh" skills, or a
+  broad skill and the narrow one it shadows) — put a `Do not use for… — that's <sibling>` on *each*
+  description, not just the one you happen to be editing. A one-sided boundary still lets the unmarked
+  sibling silently win the trigger from the other direction.
 - **Audit the marketplace for MISSING boundaries, not just for length — and include this skill in the
   sweep.** Length has an obvious failure signal (the loader truncates); a missing boundary has none —
   it fails silently, as a near-miss skill quietly winning the trigger. So grep the descriptions for

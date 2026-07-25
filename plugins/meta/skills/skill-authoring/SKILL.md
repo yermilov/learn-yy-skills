@@ -245,6 +245,16 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
 - **A stale skill is worse than none** — it actively commands deprecated behaviour. Isolate volatile
   facts (API versions, prices, policies), stamp them with a verified-on date, and review skills like
   dependencies.
+- **When you review a skill, RUN the commands it prescribes — don't read them.** Prose review cannot
+  see this class of rot, because the command still exists and still looks right. The failure that
+  proves it: a skill instructed `wdutil info` for macOS Wi-Fi stats; the binary is present, but the
+  bare call now prints only a **usage message** because it requires `sudo`. Read, it looks fine. Run,
+  it yields nothing — and an agent hitting a usage dump most naturally concludes the *tool* is
+  missing or broken and abandons the whole step, rather than re-running with elevation. Privilege
+  requirements, renamed flags, and moved output formats all rot this silently. So: execute each
+  command on a real machine, and when one needs elevation or has a no-privilege alternative, **say
+  which and prefer the alternative** — the version that runs unprompted beats the version that stalls
+  on a password prompt, especially on an unattended run.
 - **Principle of least surprise:** the skill's behaviour must not surprise someone who only read its
   description. For destructive/irreversible/external actions, summarise what will happen and get
   explicit confirmation first (or gate the skill to user-invocation).

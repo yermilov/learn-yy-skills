@@ -118,8 +118,11 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   cut is the tail, which is exactly where the `Do not use for…` boundary lives. Length is also a smell
   on its own: a classifier that needs 1100 characters is usually listing everything the skill *can* do
   instead of naming what should *trigger* it. Aim well under the cap (most good ones land at 500–900);
-  if you're near it, cut capability prose, not triggers or the boundary. Audit the whole marketplace in
-  one line: `for f in plugins/*/skills/*/SKILL.md; do …` — extract `description:` and print its length.
+  if you're near it, cut capability prose, not triggers or the boundary. When you audit the whole
+  marketplace, **parse the frontmatter as YAML — never line-grep `description:`**. A grep bleeds past
+  the description into the keys that follow it and over-reports the length; that has falsely flagged
+  three skills as over-cap and sent a whole pass down a rabbit hole. Resolve folded (`>`/`|`) and
+  continued values properly, then print each length.
   (Found the hard way: a shipped skill was sitting at 1124 chars; rewriting it as a classifier rather
   than a capability list brought it to 904 with every trigger intact.)
 

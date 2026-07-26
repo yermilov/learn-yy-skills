@@ -159,6 +159,17 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
 - **Signpost with activation conditions**, never "see the references": write
   `Read references/schema.md only when creating or validating the event schema.` The agent shouldn't
   have to browse the tree to guess what matters.
+- **Never split a permission from its prohibition.** Many rules have two halves — *"do X yourself,
+  but stop at Y"*. They move together or not at all. Leave the restrictive half inline and push the
+  permitting half into `references/` and you have made the skill **stricter than you wrote it** —
+  and that failure is **silent**: the agent produces no wrong answer to investigate, it just quietly
+  refuses work it was allowed to do. (Near-miss caught in review: a skill said *"sign in through
+  single sign-on yourself; stop only if a typed password or a 2FA code is demanded"*. A refactor
+  moved the sign-in permission into a reference and kept the credential warning in the body — an
+  agent that hadn't opened the reference would have blocked at every login wall.) The same applies
+  to any paired rule: delegate-when-bulky vs don't-delegate-the-small-stuff, retry vs escalate,
+  proceed-by-default vs the one case that needs asking. **When you move one half, move the other —
+  or restate both inline and move only the evidence behind them.**
 
 ## 3. Write for an LLM reader
 
@@ -230,6 +241,7 @@ checklist, or a reference). Without a way to check the output, a skill is just v
 | **All-Caps Tyrant**    | obeys dumb rules even when adaptation is obvious | separate hard constraints from defaults (§3 hierarchy)                                                |
 | **Demo-Prompt Skill**  | perfect in the README demo, fails in real use    | replace example-specific steps with general rules; test on messy prompts                              |
 | **Dead Reference**     | "see the reference" but the agent never does     | list each file **with an activation condition**                                                       |
+| **Severed Permission** | agent refuses work the skill actually allows     | a rule's *"you may"* half moved to `references/` while its *"but never"* half stayed inline → keep both halves in the same file (§2) |
 | **Script Nobody Runs** | useful helper ignored                            | make it explicit/required: "after editing, run `scripts/validate.py`; fix failures before responding" |
 | **Black Box Script**   | bundled script fails silently                    | verbose, LLM-readable stdout/stderr                                                                   |
 | **Lint Leakage**       | restates Prettier/ESLint/TS rules                | say which command to run + what a failure means; don't restate the rulebook                           |
@@ -326,7 +338,8 @@ on one but not the other is the usual portability failure.
 1. Can a stranger agent tell from the **description** alone when to fire it — verbs, artifacts,
    situations, synonyms, one boundary? Did you trigger-test ~10/~10?
 2. Is the **body lean** (~100–250 lines), tier-3 material moved to bundled files, references
-   **signposted with conditions**?
+   **signposted with conditions**? For anything you moved out: did **both halves** of each paired
+   rule travel together, so nothing is left only-prohibited inline?
 3. **Imperative + why**; hard rules marked **Must/Never**, the rest **Default/Prefer**; no wall of caps?
 4. Encodes **intent + Definition of Done**, generic placeholders, diverse examples — not your 3 demos?
 5. Bundling matches form (scripts=deterministic, references=read-only knowledge, assets=files); **≥1 validation** present?

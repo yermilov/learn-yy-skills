@@ -99,6 +99,18 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   broad skill and the narrow one it shadows) — put a `Do not use for… — that's <sibling>` on *each*
   description, not just the one you happen to be editing. A one-sided boundary still lets the unmarked
   sibling silently win the trigger from the other direction.
+- **Rank the boundary-less by cross-reference DIRECTION: the hub is the usual offender, and the worst
+  one.** The audit below gives you a flat list of skills with no boundary; this tells you which to fix
+  first. Count, per skill, how many SIBLINGS name it versus how many it names. The skill everyone
+  points *at* while pointing at nobody is both the likeliest gap and the highest-consequence one —
+  likeliest because a hub reads as "obviously the main one", so nobody thinks it needs a boundary;
+  worst because the classifier already defaults to it, and the hub is typically the skill that
+  CHANGES STATE while its siblings only read. The shape to look for, seen in a real plugin whose
+  skills all wrap one backend: every sibling's boundary named the hub, and the hub's description named
+  none of them — so a "what should I do next?" phrasing could fire the full do-the-work skill instead
+  of its read-only counterpart, mutating state to answer a question. That hub's description was also
+  only a quarter of the character budget, so there was no cap pressure to discover: the fix was free
+  and had simply never been looked for.
 - **Audit the marketplace for MISSING boundaries, not just for length — and include this skill in the
   sweep.** Length has an obvious failure signal (the loader truncates); a missing boundary has none —
   it fails silently, as a near-miss skill quietly winning the trigger. So grep the descriptions for

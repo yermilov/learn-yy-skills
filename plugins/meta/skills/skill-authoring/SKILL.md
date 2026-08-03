@@ -2,13 +2,14 @@
 name: skill-authoring
 description: >-
   Write, structure, and review great Agent Skills (SKILL.md files) so an agent reliably triggers
-  and follows them. Covers the description/frontmatter that decides triggering, the three kinds of
-  skill (knowledge / task / workflow), progressive-disclosure structure, when to bundle
-  scripts/references/assets, named anti-patterns, how to eval a skill, and portability across both
-  Claude and Codex. Use when creating, writing, editing, improving, reviewing, shortening, or
-  debugging a skill / SKILL.md / plugin skill — when a skill won't trigger, is too long, or must
-  work on both hosts. Triggers include «як написати скіл», «створити/покращити скіл», «чому скіл
-  не тригериться», "write a skill", "make a SKILL.md", "my skill never triggers". Do not use for
+  and follows them. Covers the description/frontmatter that decides triggering and who may invoke
+  a skill (`disable-model-invocation`, `user-invocable`), the three kinds of skill (knowledge /
+  task / workflow), progressive-disclosure structure, when to bundle scripts/references/assets,
+  named anti-patterns, how to eval a skill, and portability across both Claude and Codex. Use when
+  creating, writing, editing, improving, reviewing, shortening, or debugging a skill / SKILL.md /
+  plugin skill — when a skill won't trigger, is too long, or must work on both hosts. Triggers
+  include «як написати скіл», «створити/покращити скіл», «чому скіл не тригериться», "write a
+  skill", "make a SKILL.md", "my skill never triggers", "stop a skill auto-firing". Do not use for
   plugin PACKAGING — manifests, version bumps, marketplace wiring, README tables (that is
   plugin-dev); this skill is about the SKILL.md itself.
 ---
@@ -71,7 +72,7 @@ when you don't.
 **When NOT to use it:** for the _mechanics_ of running evals / packaging a `.skill`, or for analysing
 a finished session to decide what to change — this skill is about writing the prose well.
 
-## 1. The description is the trigger — write it like a classifier
+## 1. Activation — the description is the trigger, the flags decide who may pull it
 
 The agent always sees every skill's `name` + `description`; it does **not** always read the body. So
 the description is the skill's classifier, not marketing copy. Agents _under_-trigger skills (they can
@@ -137,6 +138,37 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   continued values properly, then print each length.
   (Found the hard way: a shipped skill was sitting at 1124 chars; rewriting it as a classifier rather
   than a capability list brought it to 904 with every trigger intact.)
+
+### Who may invoke it — two flags, three combinations
+
+The description decides *whether* a skill is a candidate; two frontmatter flags decide *who is allowed
+to pull the trigger*. Both default to off, which is why most authors never meet them:
+
+| Frontmatter                      | User | Model | Description in context      |
+| -------------------------------- | ---- | ----- | --------------------------- |
+| _(neither — the default)_        | yes  | yes   | always                      |
+| `disable-model-invocation: true` | yes  | no    | **no** — only the `/` entry |
+| `user-invocable: false`          | no   | yes   | always                      |
+
+Setting both is the one unreachable combination — it leaves nobody who can run the skill.
+
+- **`disable-model-invocation: true` is the mechanical fix for the Surprise Skill (§6).** A skill that
+  deploys, publishes, spends money, messages someone, or rewrites history should be *unable* to
+  auto-fire — not merely discouraged in prose. Prose is advisory and competes with every other line in
+  context; the flag is enforced. It is also the honest answer to "why did this skill trigger?": a
+  user-only skill never did.
+- **It removes the description from context, which cuts both ways.** You stop paying for those tokens
+  in every session — but the description is no longer a classifier, it's a menu label, so the model can
+  no longer *suggest* the command at the right moment. Take that trade only when the timing is genuinely
+  the user's call. If you want the model to recommend but not act, keep the skill model-invocable and
+  put the stop inside the body (§8) instead.
+- **`user-invocable: false` is for knowledge that isn't an action.** A `legacy-billing-context` skill
+  explains how an old system behaves; the model should load it when relevant, but `/legacy-billing-context`
+  isn't a thing a user would ever *do*. Rule of thumb: if the skill name doesn't complete the sentence
+  "I want to ___ now", it probably shouldn't be in the `/` menu. Knowledge skills (§ three kinds) are
+  the usual candidates — task and workflow skills almost never are.
+- **Reach for a flag before you reach for stronger wording.** Piling `NEVER auto-run this` into a
+  description is the All-Caps Tyrant fix for a problem the frontmatter already solves.
 
 ## 2. Structure & progressive disclosure
 
@@ -247,7 +279,7 @@ checklist, or a reference). Without a way to check the output, a skill is just v
 | **Lint Leakage**       | restates Prettier/ESLint/TS rules                | say which command to run + what a failure means; don't restate the rulebook                           |
 | **Setup Bloat**        | inlines `brew/npm install …` + env setup steps   | assume the tools are installed; move install/setup to a reference the agent reads only *on failure*   |
 | **Rotten Date**        | silently wrong over time                         | isolate volatile facts, stamp "verified as of …", tell the agent to re-check when freshness matters   |
-| **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or make it user-invocable only — _a skill may be powerful; it must not be sneaky_      |
+| **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or set `disable-model-invocation: true` (§1) — _a skill may be powerful; it must not be sneaky_ |
 
 ## 7. Test it — anecdotes aren't evals
 
@@ -281,7 +313,8 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
   on a password prompt, especially on an unattended run.
 - **Principle of least surprise:** the skill's behaviour must not surprise someone who only read its
   description. For destructive/irreversible/external actions, summarise what will happen and get
-  explicit confirmation first (or gate the skill to user-invocation).
+  explicit confirmation first — or gate the skill to user-invocation with
+  `disable-model-invocation: true` (§1), which is the enforced version of the same intent.
 - No malware, exploit code, or instructions that exfiltrate data or evade controls. (Role-play/persona
   skills are fine.)
 
@@ -344,7 +377,8 @@ on one but not the other is the usual portability failure.
 4. Encodes **intent + Definition of Done**, generic placeholders, diverse examples — not your 3 demos?
 5. Bundling matches form (scripts=deterministic, references=read-only knowledge, assets=files); **≥1 validation** present?
 6. Ran **with-skill vs. baseline** on real prompts?
-7. Volatile facts dated; destructive actions gated; nothing sneaky?
+7. Volatile facts dated; destructive actions gated by `disable-model-invocation` rather than by prose
+   alone (§1); nothing sneaky?
 8. Shipping to more than one host? Body names **capabilities, not host-only tools**; both manifests +
    both marketplaces registered; plugin `version` bumped in **lockstep**; tested on each host (§9).
 

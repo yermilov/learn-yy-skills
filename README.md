@@ -1,5 +1,7 @@
 # learn-yy-skills
 
+[![skills.sh](https://skills.sh/b/yermilov/learn-yy-skills)](https://skills.sh/yermilov/learn-yy-skills)
+
 **Yaroslav Yermilov's public marketplace of AI-agent skills** — an installable collection of Claude
 Code / Claude Cowork / Codex plugins. Each plugin is a small folder of **skills** (reusable operating
 procedures an agent loads on demand). This repo *is* the marketplace: plain files in git, no build
@@ -55,12 +57,19 @@ Codex reads [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.jso
 needs is already in the repo. Once it's in, the plugin's skills are available like any other Codex
 plugin — and ask it the same way to install another plugin (`home-it`) or to pull updates later.
 
-### Individual skills (`npx skills`)
+### Individual skills (`npx skills` / skills.sh)
 
 Want a single skill rather than the whole plugin? The skills here are plain, host-agnostic `SKILL.md`
 files, so you can install one straight into your agent with
 [`npx skills`](https://github.com/vercel-labs/skills) — no marketplace registration needed. It
-supports Claude Code, Codex, Cursor, and 60+ other agents.
+supports Claude Code, Codex, Cursor, and 60+ other agents. The same CLI powers the
+[skills.sh](https://skills.sh) directory, which ranks skills by anonymous install telemetry — so this
+repo surfaces there as people install it.
+
+```bash
+# Install every skill in the repo, into every agent you have
+npx skills add yermilov/learn-yy-skills
+```
 
 ```bash
 # See what skills this repo offers

@@ -62,9 +62,8 @@ plugin — and ask it the same way to install another plugin (`home-it`) or to p
 Want a single skill rather than the whole plugin? The skills here are plain, host-agnostic `SKILL.md`
 files, so you can install one straight into your agent with
 [`npx skills`](https://github.com/vercel-labs/skills) — no marketplace registration needed. It
-supports Claude Code, Codex, Cursor, and 60+ other agents. The same CLI powers the
-[skills.sh](https://skills.sh) directory, which ranks skills by anonymous install telemetry — so this
-repo surfaces there as people install it.
+supports Claude Code, Codex, Cursor, and 60+ other agents. All seven skills are listed in the
+[skills.sh](https://skills.sh/yermilov/learn-yy-skills) directory, which the same CLI powers.
 
 ```bash
 # Install every skill in the repo, into every agent you have

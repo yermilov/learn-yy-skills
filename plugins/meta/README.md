@@ -13,7 +13,9 @@ itself. It ships six skills and a session-start hook:
 - **skill-authoring** — how to write, structure, and review great Agent Skills (SKILL.md files): the
   description/frontmatter that decides triggering, progressive-disclosure structure and length,
   writing style for an LLM reader, when to bundle scripts/references/assets, named anti-patterns,
-  and how to make one skill portable across both Claude and Codex.
+  and how to make one skill portable across both Claude and Codex. Carries the **Claude 5
+  context-engineering reversals** — under-constrain on purpose, design interfaces instead of giving
+  examples, prefer references in code form — with the measured precedents in `references/`.
 - **marketplace-health** — diagnose an already-installed marketplace on **Claude Code or Codex**: is
   the latest published version of each plugin actually installed (vs a stale cached copy), and is
   auto-update active so it stays current? Trigger on "am I on the latest?", "why didn't my new skill

@@ -202,6 +202,20 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
   to any paired rule: delegate-when-bulky vs don't-delegate-the-small-stuff, retry vs escalate,
   proceed-by-default vs the one case that needs asking. **When you move one half, move the other —
   or restate both inline and move only the evidence behind them.**
+- **⚠️ Progressive disclosure is for DEPTH, never for the BRANCH CONDITION.** The agent decides
+  whether to open a reference *before* it has read it — and it decides from the body. So a rule that
+  tells it **which way to go** has to be in the body; only the *why*, the precedent and the worked
+  detail belong outside. The failure is invisible in review, because the rule demonstrably exists:
+  someone writes the body around the common case, later adds the second case to `references/`, and
+  every agent that meets the second case now reads a body that appears not to cover it, concludes the
+  skill is silent, and stops — without ever opening the file that answers it. Measured: a
+  task-running skill whose body described only the one-connected-device case, with the
+  two-devices-connected routing added to a reference. Over the following days at least four sessions
+  skipped a verification step they were fully authorised to do, each reporting that the choice
+  "requires an interactive question". The reference had said otherwise the whole time.
+  **Test for it:** for each branch an agent can actually land on, ask *"reading the body ALONE, does
+  it know what to do — or does it merely learn that a file exists?"* If the second, hoist one line of
+  ruling into the body and leave the evidence behind.
 
 ## 3. Write for an LLM reader
 
@@ -280,6 +294,21 @@ checklist, or a reference). Without a way to check the output, a skill is just v
 | **Setup Bloat**        | inlines `brew/npm install …` + env setup steps   | assume the tools are installed; move install/setup to a reference the agent reads only *on failure*   |
 | **Rotten Date**        | silently wrong over time                         | isolate volatile facts, stamp "verified as of …", tell the agent to re-check when freshness matters   |
 | **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or set `disable-model-invocation: true` (§1) — _a skill may be powerful; it must not be sneaky_ |
+| **All-or-Nothing Gate** | a completeness rule makes runs record *nothing* | see below                                                                                             |
+
+**All-or-Nothing Gate — write the completeness rule so it gates the CONCLUSION, not the RECORDING.**
+A quality bar phrased as *"do not write anything unless you have all N sources"* reads as rigour and
+behaves as data loss: the run that falls short discards what it did gather, so a partial observation
+— often the only observation anyone will ever have of that moment — is destroyed to protect a
+standard nothing else was going to violate. Measured on a monitoring skill with a "read all 16
+channels or write nothing" rule: three consecutive runs hit a broken login, each correctly reported
+*«не створював оцінок, сигналів чи ground-truth міток»*, and the series lost ~19 hours of coverage
+that, being time-series, **can never be backfilled** — over a window in which the event being
+monitored for actually occurred. Split the rule in two: **recording** partial input is always
+allowed and must carry an explicit coverage line (`partial pass: 7/16, missing: …`); only the
+**derived conclusion** — the score, the level, the verdict, the published number — waits for full
+coverage. Then a downstream reader can tell "no signal" from "nobody looked", which the blackout
+version makes indistinguishable.
 
 ## 7. Test it — anecdotes aren't evals
 

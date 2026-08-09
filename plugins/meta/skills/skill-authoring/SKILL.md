@@ -100,7 +100,7 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   sweep.** Length has an obvious failure signal (the loader truncates); a missing boundary has none —
   it fails silently, as a near-miss skill quietly winning the trigger. Grep the descriptions for
   `/do not use for|not for\b/i` and count the misses the same way you count characters. Treat "no
-  boundary" as the default defect, not the exception, and audit yourself first (`precedents.md` §2).
+  boundary" as the default defect, not the exception, and audit yourself first (`references/precedents.md` §2).
 - **Write the description last,** once the body is stable: describe the behaviour you built, not the
   aspiration you started with.
 - **Trigger-test it:** list ~10 prompts that _should_ fire and ~10 that _shouldn't_ (include typos,
@@ -114,7 +114,7 @@ Bad:  Helps with testing.   ← no artifacts, no verbs, no situations; fires on 
   if you're near it, cut capability prose, not triggers or the boundary. When you audit the whole
   marketplace, **parse the frontmatter as YAML — never line-grep `description:`**: a grep bleeds past
   the description into the keys that follow it and over-reports the length, which has falsely flagged
-  skills as over-cap. Resolve folded (`>`/`|`) and continued values, then print each length. (Both measured: `precedents.md` §3.)
+  skills as over-cap. Resolve folded (`>`/`|`) and continued values, then print each length. (Both measured: `references/precedents.md` §3.)
 
 ### Who may invoke it — two flags, three combinations
 
@@ -169,7 +169,7 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
   **silent** failure: the agent produces no wrong answer to investigate, it just quietly refuses work
   it was allowed to do. Applies to any paired rule: delegate-when-bulky vs don't-delegate-the-small-
   stuff, retry vs escalate, proceed-by-default vs the one case that needs asking. **When you move one
-  half, move the other — or restate both inline and move only the evidence behind them.** (`precedents.md` §4.)
+  half, move the other — or restate both inline and move only the evidence behind them.** (`references/precedents.md` §4.)
 - **⚠️ Progressive disclosure is for DEPTH, never for the BRANCH CONDITION.** The agent decides
   whether to open a reference *before* it has read it — and it decides from the body. So a rule that
   tells it **which way to go** has to be in the body; only the *why*, the precedent and the worked
@@ -179,7 +179,7 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
   skill is silent, and stops — without ever opening the file that answers it.
   **Test for it:** for each branch an agent can actually land on, ask *"reading the body ALONE, does
   it know what to do — or does it merely learn that a file exists?"* If the second, hoist one line of
-  ruling into the body and leave the evidence behind. (What it cost: `precedents.md` §5.)
+  ruling into the body and leave the evidence behind. (What it cost: `references/precedents.md` §5.)
 
 ## 3. Write for an LLM reader
 
@@ -352,10 +352,19 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
   when one needs elevation or has a no-privilege alternative, **say which and prefer the alternative**
   — the version that runs unprompted beats the one that stalls on a password prompt, especially on an
   unattended run. (The case that proves it: `references/precedents.md` §7.)
+- **A skill's own statement of scope is a TESTABLE claim — check the body against it.** When a skill
+  says some class of detail "lives elsewhere" (project specifics in each project's own memory file,
+  mechanics in a sibling skill, setup in a reference), grep the body for that class before believing
+  it. The disclaimer is exactly what stops anyone looking, which is why this is the cheapest
+  high-yield check in a review — and the damage is **directional**: the reader it misleads is the one
+  working in a *different* project, who follows another project's hardcoded origins, paths and env
+  vars as if they were their own. Reconcile it in whichever direction is true — narrow the claim, or
+  move the detail out and leave a placeholder.
 - **A periodic re-review is the point, not a chore.** Skills drift out of conformance as this guidance
   itself changes — the Claude 5 reversals (§3) invalidated advice that was correct when written. Sweep
-  the library on a cadence: `/doctor` first for mechanical rightsizing, then by hand for the things it
-  can't see — a missing `Do not use for…` (§1), a ruling stranded in a reference (§2), and rules that
+  the library on a cadence: where the host ships a rightsizing tool, run it first for the mechanical
+  pass (`/doctor` on Claude Code — Codex's like-named command only diagnoses its own install, so there
+  the mechanical pass is manual), then go by hand for the things it can't see — a missing `Do not use for…` (§1), a ruling stranded in a reference (§2), and rules that
   contradict a neighbouring skill or `CLAUDE.md`. Fix a few per pass rather than rewriting everything.
 - **Principle of least surprise:** the skill's behaviour must not surprise someone who only read its
   description. For destructive/irreversible/external actions, summarise what will happen and get

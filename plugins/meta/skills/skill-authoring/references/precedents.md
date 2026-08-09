@@ -128,3 +128,38 @@ skills and CLAUDE.md files.
 
 **This section is generation-specific — re-verify it when a new model family ships.** Several of these
 reversals invert advice that was correct for older models; the next generation may move them again.
+
+## 9. One family of workflow skills registered its steps; no other workflow did (§2)
+
+An audit of a mature marketplace. A heading scan **shortlists** candidates — three or more
+numbered step headings, or a `## Workflow` section — and a second sweep asks which skills say
+anything at all about tracking the run:
+
+```
+find . -name SKILL.md | while read f; do            # accept . ) : - — after the number
+  s=$(grep -cE "^#{2,3} *(Step )?[0-9]+ *[-—:.)]" "$f"); w=$(grep -ciE "^#{2,3} +workflow" "$f")
+  { [ "$s" -ge 3 ] || [ "$w" -ge 1 ]; } && echo "$f"
+done
+grep -rilE "TODOs|todo list|todo item|todowrite|task list|track (the )?steps" --include=SKILL.md .
+```
+
+**The scan is a shortlist, not a classifier — read the matches.** It returned a few dozen files, and
+reading them separates genuine procedures from *knowledge* skills that merely number their sections
+(this guide is one).
+
+**Then get the second sweep right, because the first attempt at it was wrong.** Searching only for
+`todo list|todo item` returned three irrelevant files and looked like a clean zero; widening it to
+`TODOs` surfaced **a handful of skills that had carried the instruction all along** — one family
+sharing a template, each opening its `## Workflow` with the same line, *"Register these as TODOs and
+work the list."* No workflow skill outside that family had anything, including the ones that run
+unattended on a schedule, where a silently skipped step is least likely to be noticed.
+
+So the honest finding is not "nobody did it" but **"one family did it and it never generalized"**:
+one template, and every other workflow written after the same authoring guide skipping it. The
+guide's sentence addresses the **author**, and the author is not present at run
+time; only a template put the words where the running agent would read them. (The owner's own read
+was the stronger "not one of my workflow skills follows the scheme" — the audit is what narrowed it.)
+
+Nothing about the runs looked wrong, which is the cost: with no registered list, a run that did three
+of seven steps produces the same shape of report as one that did all seven, and the skipped steps are
+invisible to the agent itself, to the reader, and to any later review.

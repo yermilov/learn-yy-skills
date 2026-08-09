@@ -25,6 +25,23 @@ The four layers, outermost to innermost:
 3. **Wi-Fi path** — distance, walls, interference, and any **wirelessly-backhauled** extender.
 4. **Client** — the device's Wi-Fi radio, negotiated rate, drivers, adapter.
 
+## Step 0 — register the run
+
+**Create these TODO items before the first measurement, and while work remains keep exactly one in
+progress.** Diagnosis skipped is diagnosis invented: a run that guessed at step 4 without step 2's
+numbers reports the same shape as one that measured.
+
+If a list is already in progress — this skill invoked from a larger workflow — resubmit that list
+complete with these items after the one that called you, leaving the caller's remaining items intact.
+
+1. Measure the baseline from the affected device, in all three positions
+2. Localize the bottleneck to a layer
+3. Inspect the router admin UI
+4. Diagnose and recommend up the fix ladder, ranked and backed by the numbers
+
+A step a branch makes moot — no admin access to the router, say — is completed with that reason, not
+left open.
+
 ## 1. Measure the baseline (from the affected device)
 
 Run these in **three positions**, in this order: **where the problem is** (e.g. at the desk), then

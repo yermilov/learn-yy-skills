@@ -47,9 +47,10 @@ Decide which kind you're writing before you start — it sets the shape, the len
    cases, and detailed guidance — the hard-won learnings that make the model do it **better** than
    running that prompt cold. The opening prompt is the contract; everything under it is know-how.
 3. **Workflow skill** — a *step-by-step procedure* for something non-trivial, with branches,
-   conditions, and loops. At the start of execution the agent should register each step as a TODO item
-   and work the list; each step is essentially its own task skill (a prompt + how to do it well). Use
-   when order and completeness matter and a single prompt would skip steps.
+   conditions, and loops. Each step is essentially its own task skill (a prompt + how to do it well),
+   and the skill must **tell the running agent, in its own first step, to register the steps as TODO
+   items** — §2 has the shape, the length rule and the forcing device. Use when order and completeness
+   matter and a single prompt would skip steps.
 
 Most skills are one kind; some blend. The kind sets your defaults — knowledge leads with prose +
 references, a task skill with its prompt, a workflow skill with its ordered steps and a TODO list — so
@@ -157,7 +158,8 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
 
 - **Length:** most bodies want **~100–250 lines**; treat **300+ as a warning sign**. The documented
   ceiling is ~500 lines — don't aim for it. A skill that runs thousands of times should be lean by
-  default. (Past ~500 lines, add a layer of hierarchy and point outward.)
+  default. (Past ~500 lines, add a layer of hierarchy and point outward.) **Workflow skills budget per
+  step instead** — see the subsection at the end of this section.
 - **Body skeleton that works:** `When to use` (+ when not) → `Goal`/success state → `Workflow` →
   `Decision rules` (If X, do Y) → `Output` → `Quality checks` → `Bundled resources`.
 - **Signpost with activation conditions**, never "see the references": write
@@ -180,6 +182,55 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
   **Test for it:** for each branch an agent can actually land on, ask *"reading the body ALONE, does
   it know what to do — or does it merely learn that a file exists?"* If the second, hoist one line of
   ruling into the body and leave the evidence behind. (What it cost: `references/precedents.md` §5.)
+
+### Workflow skills — the step list has to be executable, not decorative
+
+A workflow skill's body *is* a procedure, so three defaults change for this kind.
+
+**Open with a copyable TODO block — the guidance you are reading now never reaches the agent that
+RUNS your skill.** "Register each step as a TODO" is advice to *you*, the author; the executing agent
+reads only the file you shipped, and a numbered body reads to it as prose it may skim. So put the
+forcing device *in the skill*, as its first step, naming the items:
+
+```
+## Step 0 — register the run
+Create these TODO items now, before doing anything else, and while work remains keep exactly one
+in progress:
+1. <step 1 title>   2. <step 2 title>   3. …
+Add step <N> only if <condition>. A step the branch skips is completed with the reason, not left
+open — an unfinished list at the end must mean something really is unfinished.
+```
+
+**Say what happens when your workflow is invoked BY another one**, because hosts expose one flat
+list and replace it wholesale: when a list is already in progress, resubmit it **complete**, with
+your steps after the item that called you and every remaining caller item intact — that calling item
+going back to pending while yours run, and completing when the last one does.
+
+The heading is yours to pick; a `## Workflow` opening with "Register these as TODOs and work the
+list" does the same job. What matters is that the instruction addresses the runner. Audited across a
+mature marketplace: **one family of skills sharing a template carried such a line; every other
+workflow, written after the same guidance, carried nothing** — so a run that did three of seven steps
+reported the same shape as one that did all seven (`references/precedents.md` §9).
+
+**Body skeleton for this kind** (it replaces the generic one above): `When to use` (+ when not) →
+`Definition of done` → **the TODO block** → one `## N. <step>` section per step, each opening with
+its own one-line prompt and then the how-to-do-it-well → branch/decision rules → `Output` →
+`Bundled resources`. Keep the mapping legible both ways — every item resolves to a named place in the
+body and no step section is missing from the list; one heading per step is the clean default, and
+folding or splitting is fine while the numbering still lines up.
+
+**Length: a workflow skill is the legitimate exception to the ~100–250 default** — not to the ~500
+ceiling. It carries N steps, each a small task skill, so budget **per step** — "is any single step
+longer than it needs to be?" — rather than counting the file. What does *not* change is the tier-2
+cost: the body stays in context all session, so past ~500 lines every step still inline owes you a
+reason its depth isn't in a reference. (A heavily-branched task runner honestly runs past 800 — which
+is a real workflow's size, and a standing argument for the next paragraph.)
+
+**Which is why you pay for the steps with `references/`: one file per deep step.** Keep inline the
+step, its order, its branch conditions and its rulings; move the evidence, precedents, long alternate
+paths and platform detail out, signposted by the step that opens it ("Read `references/browser.md`
+before your first browser call"). Same body-holds-the-branch, reference-holds-the-depth rule as
+above — for a workflow skill it is the only way to stay lean per run.
 
 ## 3. Write for an LLM reader
 
@@ -315,6 +366,7 @@ checklist, or a reference). Without a way to check the output, a skill is just v
 | **Setup Bloat**        | inlines `brew/npm install …` + env setup steps   | assume the tools are installed; move install/setup to a reference the agent reads only *on failure*   |
 | **Rotten Date**        | silently wrong over time                         | isolate volatile facts, stamp "verified as of …", tell the agent to re-check when freshness matters   |
 | **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or set `disable-model-invocation: true` (§1) — _a skill may be powerful; it must not be sneaky_ |
+| **Decorative Checklist** | a workflow skill's steps get skimmed — the agent does 1, 3 and 7 and calls it done | numbered prose is not a checklist → open the skill with the copyable Step-0 TODO block (§2) |
 | **All-or-Nothing Gate** | a completeness rule makes runs record *nothing* | see below                                                                                             |
 
 **All-or-Nothing Gate — write the completeness rule so it gates the CONCLUSION, not the RECORDING.**
@@ -428,6 +480,10 @@ on one but not the other is the usual portability failure.
    alone (§1); nothing sneaky?
 8. Shipping to more than one host? Body names **capabilities, not host-only tools**; both manifests +
    both marketplaces registered; plugin `version` bumped in **lockstep**; tested on each host (§9).
+9. **Workflow skill?** Does it open with the copyable **Step-0 TODO block**, does every item resolve
+   to a named place in the body (and vice-versa), and is every deep step's evidence in `references/`? Length is judged
+   **per step** *and* still against the ~500-line ceiling — a file over it needs each remaining step
+   to justify why its depth isn't in a reference (§2).
 
 ## Bundled resources
 

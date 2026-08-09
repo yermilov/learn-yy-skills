@@ -13,7 +13,9 @@ itself. It ships six skills and a session-start hook:
 - **skill-authoring** — how to write, structure, and review great Agent Skills (SKILL.md files): the
   description/frontmatter that decides triggering, progressive-disclosure structure and length,
   writing style for an LLM reader, when to bundle scripts/references/assets, named anti-patterns,
-  and how to make one skill portable across both Claude and Codex. Carries the **Claude 5
+  and how to make one skill portable across both Claude and Codex. Gives **workflow skills** their own
+  contract — the copyable Step-0 TODO block a running agent registers, a per-kind skeleton, and
+  length budgeted per step with each deep step's evidence in `references/`. Carries the **Claude 5
   context-engineering reversals** — under-constrain on purpose, design interfaces instead of giving
   examples, prefer references in code form — with the measured precedents in `references/`.
 - **marketplace-health** — diagnose an already-installed marketplace on **Claude Code or Codex**: is

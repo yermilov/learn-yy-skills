@@ -185,46 +185,62 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
 
 ### Workflow skills — the step list has to be executable, not decorative
 
-A workflow skill's body *is* a procedure, so three defaults change for this kind.
+A workflow skill's body *is* a procedure, so several defaults change for this kind.
 
 **Open with a copyable TODO block — the guidance you are reading now never reaches the agent that
-RUNS your skill.** "Register each step as a TODO" is advice to *you*, the author; the executing agent
-reads only the file you shipped, and a numbered body reads to it as prose it may skim. So put the
-forcing device *in the skill*, as its first step, naming the items:
+RUNS your skill.** "Register each step as a TODO" is advice to *you*, the author; the runner reads
+only the file you shipped, and a numbered body reads to it as skimmable prose. Put the forcing device
+*in the skill*, as its first step, naming the items:
 
 ```
 ## Step 0 — register the run
-Create these TODO items now, before doing anything else, and while work remains keep exactly one
-in progress:
+Register these as todo items now, before doing anything else, in whatever todo/plan tool this host
+gives you — and while work remains keep exactly one in progress:
 1. <step 1 title>   2. <step 2 title>   3. …
 Add step <N> only if <condition>. A step the branch skips is completed with the reason, not left
 open — an unfinished list at the end must mean something really is unfinished.
+No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
+its name differs per host. It must be the SESSION's own planner, never an external tracker (Jira,
+Linear, a task app): your bookkeeping is not their backlog. If there truly is none, keep the list in
+your replies — state it once, name each item as you start it, account for every one at the end.
 ```
 
-**Say what happens when your workflow is invoked BY another one**, because hosts expose one flat
-list and replace it wholesale: when a list is already in progress, resubmit it **complete**, with
-your steps after the item that called you and every remaining caller item intact — that calling item
-going back to pending while yours run, and completing when the last one does.
+**Those lines are not boilerplate: name the CAPABILITY, bound it, and spell out the fallback.** An
+agent told to use one host's handle (`TodoWrite`) where the tool is named differently — or merely
+**deferred** behind a tool-search — concludes the capability is missing and silently degrades to
+"I'll track it inline", the exact failure the block exists to prevent (§9). And bound the search to
+the session's own planner: a connected work tracker also answers to "todo", and writing run
+bookkeeping into a real backlog is an outward action nobody asked for (§8, least surprise).
 
-The heading is yours to pick; a `## Workflow` opening with "Register these as TODOs and work the
-list" does the same job. What matters is that the instruction addresses the runner. Audited across a
-mature marketplace: **one family of skills sharing a template carried such a line; every other
-workflow, written after the same guidance, carried nothing** — so a run that did three of seven steps
-reported the same shape as one that did all seven (`references/precedents.md` §9).
+**Say what happens when your workflow is invoked BY another one: add to the caller's list, never
+replace it — and make the CALLING ITEM the gate.** It returns to **pending** while your steps run (one
+in progress at a time) and completes when your last one does; that gate carries the order, because
+position won't. A *replacement* API takes the whole plan at once, so resubmit it complete with the
+caller's remaining items intact. An *item-oriented* API has no insertion point — your steps get later
+ids and land at the **tail**, after the caller's closing items — so say that is expected, and where
+the tool has dependency links use them **both ways**: the calling item blocked by your steps, and the
+caller's remaining items blocked by the calling item. Write the rule as the outcome, never as one
+API's call.
+
+The heading is yours to pick — a `## Workflow` opening with "Register these as TODOs and work the
+list" does the same job; what matters is that the instruction addresses the runner. Audited across a
+mature marketplace, **one family of skills carried such a line and every other workflow carried
+nothing**, so a run that did three of seven steps reported the same shape as one that did all seven
+(`references/precedents.md` §9).
 
 **Body skeleton for this kind** (it replaces the generic one above): `When to use` (+ when not) →
 `Definition of done` → **the TODO block** → one `## N. <step>` section per step, each opening with
 its own one-line prompt and then the how-to-do-it-well → branch/decision rules → `Output` →
 `Bundled resources`. Keep the mapping legible both ways — every item resolves to a named place in the
-body and no step section is missing from the list; one heading per step is the clean default, and
-folding or splitting is fine while the numbering still lines up.
+body and no step section is missing from the list; one heading per step is the default, and folding
+or splitting is fine while the numbering lines up.
 
 **Length: a workflow skill is the legitimate exception to the ~100–250 default** — not to the ~500
 ceiling. It carries N steps, each a small task skill, so budget **per step** — "is any single step
 longer than it needs to be?" — rather than counting the file. What does *not* change is the tier-2
 cost: the body stays in context all session, so past ~500 lines every step still inline owes you a
-reason its depth isn't in a reference. (A heavily-branched task runner honestly runs past 800 — which
-is a real workflow's size, and a standing argument for the next paragraph.)
+reason its depth isn't in a reference. (A heavily-branched task runner honestly runs past 800 — a real
+workflow's size, and a standing argument for the next paragraph.)
 
 **Which is why you pay for the steps with `references/`: one file per deep step.** Keep inline the
 step, its order, its branch conditions and its rulings; move the evidence, precedents, long alternate

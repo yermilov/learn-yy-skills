@@ -31,8 +31,16 @@ The four layers, outermost to innermost:
 progress.** Diagnosis skipped is diagnosis invented: a run that guessed at step 4 without step 2's
 numbers reports the same shape as one that measured.
 
-If a list is already in progress — this skill invoked from a larger workflow — resubmit that list
-complete with these items after the one that called you, leaving the caller's remaining items intact.
+If a list is already in progress — this skill invoked from a larger workflow — add these items without
+dropping the caller's, return the item that called you to pending until your last one is done, and where
+the tool has dependency links mark it **blocked by** these and the caller's remaining items
+**blocked by** it — an item-oriented tool appends at the tail, and position won't hold the order.
+
+**Register them in this session's own todo/plan tool — if you don't see one, SEARCH for it before
+concluding there is none**: on hosts with deferred tools it exists under a name you weren't looking
+for. Never an external tracker; your run bookkeeping is not someone's backlog. If there genuinely is
+none, keep the list in your replies and account for every item at the end — "I'll track it inline"
+with no stated list is precisely the failure this block exists to prevent.
 
 1. Measure the baseline from the affected device, in all three positions
 2. Localize the bottleneck to a layer

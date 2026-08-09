@@ -163,3 +163,19 @@ was the stronger "not one of my workflow skills follows the scheme" — the audi
 Nothing about the runs looked wrong, which is the cost: with no registered list, a run that did three
 of seven steps produces the same shape of report as one that did all seven, and the skipped steps are
 invisible to the agent itself, to the reader, and to any later review.
+
+**The sequel, one day after those blocks shipped: the very first observed run dropped the list
+anyway.** A remote-control session opened the task-runner skill, reached the new block, and reported
+verbatim — *"No TodoWrite tool in this session — I'll track the lifecycle items inline"* — then
+worked without one. The tool was there. That host exposes the capability under **different names**
+(`TaskCreate` / `TaskUpdate` / `TaskList`) **and defers them**: they are absent from the initial tool
+list and load only on an explicit tool-search, so an agent scanning for a familiar handle sees
+nothing and concludes the host has none. Registering the same list by hand in a later session on that
+host took one search and four calls.
+
+Two rules come out of it, and the second is the one that bites. **Name the capability, not the
+handle** — "the host's todo/plan tool" — which is only §9's portability rule applied to the block you
+just mandated. And **say what "no such tool" means**: search for it first, and give the fallback
+explicitly, because the alternative the runner improvises ("I'll track it inline") is indistinguishable
+in the report from having tracked nothing at all. A mandate the runner cannot execute does not fail
+loudly; it fails as a polite sentence about tracking things inline.

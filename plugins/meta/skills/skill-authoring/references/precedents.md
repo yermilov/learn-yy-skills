@@ -179,3 +179,27 @@ just mandated. And **say what "no such tool" means**: search for it first, and g
 explicitly, because the alternative the runner improvises ("I'll track it inline") is indistinguishable
 in the report from having tracked nothing at all. A mandate the runner cannot execute does not fail
 loudly; it fails as a polite sentence about tracking things inline.
+
+**The third act, three weeks on: the block was there, was worked in full, and still hid a skipped
+check.** A review workflow had registered all seven of its steps and completed every one. But its
+step "review it against both standards" was, in the body, **seven independent checks** — frontmatter,
+truth, executability, contradictions, structure & weight, workflow conformance, safety — and it had
+been registered as **one** item. At least one of the seven, whether the reviewed file carried the
+newest structural requirement, was never run. The owner found that by asking, not by reading the run,
+because there was nothing to read: an item closed after four checks and an item closed after seven
+are the same tick. Registering the list had made the *steps* auditable and left the thing that
+actually got skipped one level below the resolution of the record.
+
+Which yields the granularity rule in §2, and the reason it is not pedantry: the block's whole value is
+that an unfinished list means unfinished work. Any item that can be honestly closed while part of it
+went undone breaks that equivalence, and it breaks it silently — the failure mode this entire
+precedent is about, reproduced by the fix for it. The cheap test is the one in §2 (*could this item be
+closed while a named sub-check was never performed?*), and the cheap repair is that each item closes
+naming what it checked, so "clean" carries its own evidence.
+
+**A second miss in the same pass came from the standard itself moving.** Several of the rules the
+review was meant to apply had been added to this guide *after* the file under review was written —
+and after its previous review. An agent applying "the standard" from memory applies the rules it
+already knew, and nothing about that looks like a skipped check. Where a review is periodic, make the
+drift mechanical: record which version of the standard each review ran against, and diff the
+standard's history since that version before starting the next one.

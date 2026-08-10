@@ -205,6 +205,24 @@ Linear, a task app): your bookkeeping is not their backlog. If there truly is no
 your replies — state it once, name each item as you start it, account for every one at the end.
 ```
 
+**One item per thing that can be independently skipped — a step holding N checks is itself a
+checklist.** The block cures skimming at the level it enumerates and nowhere below: register a step
+whose body is eight separate checks as ONE item, and a run that did three reports the same shape as
+one that did eight — the Decorative Checklist rebuilt inside the device meant to cure it. Test every
+item: *could it be closed while a named sub-check was never performed?* Then split it, and have each
+item close with a verdict that names what was checked — a "clean" that cannot say what it looked at
+is indistinguishable from not having looked (`references/precedents.md` §9).
+
+**And bound it, because everything decomposes forever.** The test is *skippable with consequence and
+invisibly so*, not *decomposable*: split while omitting a part would change the outcome and nothing in
+the record would show it — and stop there. Below that line the item stays whole and **its close
+carries the enumeration** ("all four measurements taken", "loss test skipped: no gateway reachable").
+That is the pair that makes the rule terminate: splitting protects what a reader must be able to
+audit, the close-verdict protects the rest, and a list split past the point of consequence is just
+the All-Caps Tyrant (§3) in list form — when every line is a checkpoint, none is. This rule is a
+property, not a string: no marker can detect it, so its audit is the per-item test above plus
+checklist item 9 (§8 says why that distinction matters).
+
 **Those lines are not boilerplate: name the CAPABILITY, bound it, and spell out the fallback.** An
 agent told to use one host's handle (`TodoWrite`) where the tool is named differently — or merely
 **deferred** behind a tool-search — concludes the capability is missing and silently degrades to
@@ -223,9 +241,7 @@ caller's remaining items blocked by the calling item. Write the rule as the outc
 API's call.
 
 The heading is yours to pick — a `## Workflow` opening with "Register these as TODOs and work the
-list" does the same job; what matters is that the instruction addresses the runner. Audited across a
-mature marketplace, **one family of skills carried such a line and every other workflow carried
-nothing**, so a run that did three of seven steps reported the same shape as one that did all seven
+list" does the same job; what matters is that the instruction addresses the runner
 (`references/precedents.md` §9).
 
 **Body skeleton for this kind** (it replaces the generic one above): `When to use` (+ when not) →
@@ -428,11 +444,35 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
   working in a *different* project, who follows another project's hardcoded origins, paths and env
   vars as if they were their own. Reconcile it in whichever direction is true — narrow the claim, or
   move the detail out and leave a placeholder.
+- **A mandatory rule needs an audit and a rollout, or it binds only the skill you were editing.**
+  Say, in the same change, **how conformance is detected** and **who gets swept**:
+  - **A requirement that IS a string** (a block, a heading, a named section) gets a **fixed marker**
+    every conforming skill carries. `grep -L <marker>` is then the check — but pair it with the
+    **inventory of skills the rule applies to**, or it cannot tell *missing* from *not applicable*:
+    a requirement scoped to workflow skills flags every knowledge skill too, and a marker you allow
+    in two forms needs both in the pattern. The grep is a shortlist; the inventory is the verdict.
+  - **A requirement that is a PROPERTY** no string can express — "each item covers one
+    independently-skippable thing", "the branch condition is in the body" — has no marker, so **say
+    so and name the check that enforces it instead**: a line in the pre-ship checklist, and a named
+    check in whatever review the library runs. Inventing a marker for a property is worse than none;
+    it makes the grep pass while the property is absent.
+  - **Rollout is the second half, and it is the one that silently doesn't happen.** Enumerate every
+    plugin — not the ones you happened to be editing — or, if that is a job of its own, file it as
+    its own work item in the same change. A sweep that added one requirement "to every workflow
+    skill here" reached three plugins, missed the most-loaded workflow skill in the library, and
+    nothing reported the gap. A mandate landed on one skill is a mandate nobody else has.
 - **A periodic re-review is the point, not a chore.** Skills drift out of conformance as this guidance
   itself changes — the Claude 5 reversals (§3) invalidated advice that was correct when written. Sweep
   the library on a cadence: where the host ships a rightsizing tool, run it first for the mechanical
   pass (`/doctor` on Claude Code — Codex's like-named command only diagnoses its own install, so there
-  the mechanical pass is manual), then go by hand for the things it can't see — a missing `Do not use for…` (§1), a ruling stranded in a reference (§2), and rules that
+  the mechanical pass is manual), then go by hand for the things it can't see. **Record the COMMIT
+  this guide was at when each review ran, and open the next one by diffing the endpoints —
+  `git diff <sha>..HEAD -- <path/to/this/skill>`** — otherwise a reviewer applies the rules it
+  already knew, and a skill written before a rule silently conforms to nothing: a skipped check no
+  report can show. Anchor on a **SHA**, not `log -p` (which replays rules later withdrawn), and never
+  on a package version — `0.7.20..HEAD` is not a revision, and `--since=0.7.20` is silently read as a
+  calendar date (a real date does work with `--since`). Then look for the things no diff shows — a
+  missing `Do not use for…` (§1), a ruling stranded in a reference (§2), and rules that
   contradict a neighbouring skill or `CLAUDE.md`. Fix a few per pass rather than rewriting everything.
 - **Principle of least surprise:** the skill's behaviour must not surprise someone who only read its
   description. For destructive/irreversible/external actions, summarise what will happen and get
@@ -497,7 +537,8 @@ on one but not the other is the usual portability failure.
 8. Shipping to more than one host? Body names **capabilities, not host-only tools**; both manifests +
    both marketplaces registered; plugin `version` bumped in **lockstep**; tested on each host (§9).
 9. **Workflow skill?** Does it open with the copyable **Step-0 TODO block**, does every item resolve
-   to a named place in the body (and vice-versa), and is every deep step's evidence in `references/`? Length is judged
+   to a named place in the body (and vice-versa), is no item a **bundle of independently-skippable
+   checks**, and is every deep step's evidence in `references/`? Length is judged
    **per step** *and* still against the ~500-line ceiling — a file over it needs each remaining step
    to justify why its depth isn't in a reference (§2).
 

@@ -42,10 +42,20 @@ for. Never an external tracker; your run bookkeeping is not someone's backlog. I
 none, keep the list in your replies and account for every item at the end — "I'll track it inline"
 with no stated list is precisely the failure this block exists to prevent.
 
-1. Measure the baseline from the affected device, in all three positions
-2. Localize the bottleneck to a layer
-3. Inspect the router admin UI
-4. Diagnose and recommend up the fix ladder, ranked and backed by the numbers
+1. Measure where the problem is — Wi-Fi, at the affected spot (§1)
+2. Measure next to the router — Wi-Fi (§1)
+3. Measure wired into the router over Ethernet (§1) — **its own item because it is the control, and
+   the control is what gets skipped**; one "measure the baseline" item would hide that
+4. Localize the bottleneck to a layer (§2)
+5. Inspect the router admin UI (§3)
+6. Diagnose and recommend up the fix ladder, ranked and backed by the numbers (§4)
+
+Items 1–3 are one item per **position**, not per metric — but each closes naming the four
+measurements §1 asks for at that spot (throughput+bufferbloat · loss+latency · link quality/rate ·
+client sanity), or which one you skipped and why. "Measured the desk" without that list is a row of
+the table you cannot fill. Same for 4 and 5: close item 4 naming which layer each gap pointed at, and
+item 5 naming the router settings you actually read — an unenumerated "looked at the router" hides
+the one setting that was the answer.
 
 A step a branch makes moot — no admin access to the router, say — is completed with that reason, not
 left open.

@@ -14,7 +14,8 @@ itself. It ships six skills and a session-start hook:
   description/frontmatter that decides triggering, progressive-disclosure structure and length,
   writing style for an LLM reader, when to bundle scripts/references/assets, named anti-patterns,
   and how to make one skill portable across both Claude and Codex. Gives **workflow skills** their own
-  contract — the copyable Step-0 TODO block a running agent registers, a per-kind skeleton, and
+  contract — the copyable Step-0 TODO block a running agent registers, **one item per
+  independently-skippable check** so a partly-done step can't close as done, a per-kind skeleton, and
   length budgeted per step with each deep step's evidence in `references/`. Carries the **Claude 5
   context-engineering reversals** — under-constrain on purpose, design interfaces instead of giving
   examples, prefer references in code form — with the measured precedents in `references/`.

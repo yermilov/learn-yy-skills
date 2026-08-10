@@ -197,6 +197,21 @@ precedent is about, reproduced by the fix for it. The cheap test is the one in �
 closed while a named sub-check was never performed?*), and the cheap repair is that each item closes
 naming what it checked, so "clean" carries its own evidence.
 
+**And the phrasing kept drifting, which is why §8 now says to fix the marker when you write the
+rule.** Two weeks after the blocks shipped, one marketplace carried **three** rival sentences — 16
+skills with "Register them in this session's own todo/plan tool", 6 with "Register these as TODOs", 4
+with "Register these as todo items now". Of its 36 workflow-shaped skills, 20 carried some
+instruction and the narrow `todo list|todo item` pattern found **15 of those 20**: a 25% miss rate on
+a mandate its own author could not grep for. Nothing was wrong with any of the three wordings — only
+with there being three.
+
+**Then the fix reproduced the failure one level up.** The reviewer who named the marker picked the
+two forms that read best rather than the two the corpus used — and immediately shipped a mandate that
+the library's own workflow skills did not satisfy, i.e. the §8 rollout gap, created by the change
+that added the rule against it. Re-measuring and adopting the two phrasings already in use took the
+coverage to 20 of 20 with no edits to anyone else's skill. Hence: **choose the marker from what
+conforming skills already say.**
+
 **A second miss in the same pass came from the standard itself moving.** Several of the rules the
 review was meant to apply had been added to this guide *after* the file under review was written —
 and after its previous review. An agent applying "the standard" from memory applies the rules it

@@ -76,7 +76,9 @@ Before **each commit** to this repo, review the full change set against the inst
   (root Plugins table + per-plugin READMEs), and its **pre-ship checklist**; run the checklist over
   the diff before committing.
 - **skill-authoring** — any added or edited `SKILL.md` must follow it (triggering description, lean
-  body, progressive disclosure, no external references).
+  body, progressive disclosure into the skill's **own** bundled `references/` `scripts/` `assets/`,
+  never into a file outside the marketplace). Referring to a *sibling skill by name* is the
+  encouraged way to compose them — that is not an external reference.
 - **marketplace-health** — after publishing, use it to verify the installed marketplace actually
   picked the change up.
 

@@ -218,3 +218,28 @@ and after its previous review. An agent applying "the standard" from memory appl
 already knew, and nothing about that looks like a skipped check. Where a review is periodic, make the
 drift mechanical: record which version of the standard each review ran against, and diff the
 standard's history since that version before starting the next one.
+
+**Measured afterwards, and the number is the point: the block works, and "search for it" was still
+not enough.** Eighty-five completed runs of one task-runner workflow were read from the host's own
+transcripts — tool calls, not self-report; the in-flight run doing the reading is excluded. Before
+the search line shipped, **4 of 52** registered anything. After it, **33 of 33** did, a median 14
+seconds after opening the skill, and 573 of 578 items were closed by the end. So the device holds;
+what follows is the residue, not a retraction.
+
+In **3 of those 33** the runner still announced *"No todo tool in this session, so I'll track the run
+inline"* — and then, half a minute to two minutes later, searched again, found the tool and registered
+the list properly. The recoveries are what identify the real defect. One of the three had already
+searched the **capability** words ("todo list plan tracking"), which returns the tool on that host; it
+read the results and concluded there was none anyway. Another searched by exact handle for the name it
+remembered (`TodoWrite`) and took the empty result as proof. A third narrated the correction outright
+— *"`TaskCreate`/`TaskUpdate` **is** this session's todo tool — registering the run there now instead
+of inline"* — which is the whole failure in one sentence: it had the answer on screen and did not
+recognise it.
+
+So the instruction that fails is not *look*, it is *know what you are looking at*. Telling a runner to
+search hands it a result set it has no test for, and the wrong test is the one it arrives with: a
+remembered handle. **Give the recognition rule with the search** — anything that creates items and
+marks them in progress and completed IS the tool, whatever it is called; an empty result for one
+remembered name is evidence about the name only. That keeps §9's "name the capability, not the handle"
+intact, because a recognition test is not a handle: it is what makes the capability identifiable on a
+host whose handle you cannot know.

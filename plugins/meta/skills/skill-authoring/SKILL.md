@@ -191,19 +191,22 @@ gives you — and while work remains keep exactly one in progress:
 Register the conditional steps too: one a branch makes moot is completed WITH THAT REASON, never
 left open — an unfinished list at the end must mean something really is unfinished.
 No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
-its name differs per host. It must be the SESSION's own planner, never an external tracker (Jira,
-Linear, a task app): your bookkeeping is not their backlog. If there truly is none, keep the list in
-your replies — state it once, name each item as you start it, account for every one at the end.
+its name differs per host. Anything that creates items and marks them in progress and completed IS
+that tool, whatever it is called; an empty result for one remembered name is evidence about the name,
+not about the host. It must be the SESSION's own planner, never an external tracker (Jira, Linear, a
+task app): your bookkeeping is not their backlog. If there truly is none, keep the list in your
+replies — state it once, name each item as you start it, account for every one at the end.
 ```
 
 **Keep one of the two marker sentences verbatim** — `Register these as todo items` (the block above)
 or `Register them in this session's own todo/plan tool` (the same rule written as prose) — because §8
 makes you say how conformance is detected, and this requirement is a string. The *heading* is yours
 to pick, and so is everything around the sentence; it is only what a `grep -L` finds. Every other line
-of the block is load-bearing too — name the **capability**, not one host's handle (an agent told to
-find `TodoWrite` on a host that renames or defers it concludes the capability is missing and degrades
-to "I'll track it inline", the exact failure the block prevents), bound the search to the session's
-own planner, and spell out the fallback.
+of the block is load-bearing too — name the **capability**, not one host's handle, and give the
+**recognition test** beside the search: an agent hunting `TodoWrite` on a host that renames or defers
+it declares the capability missing, and one that searches without a test declares it missing with the
+answer on screen (both measured) — each degrades to "I'll track it inline", the exact failure the
+block prevents. Then bound the search to the session's own planner, and spell out the fallback.
 
 **One item per thing that can be independently skipped — a step holding N checks is itself a
 checklist.** The block cures skimming at the level it enumerates and nowhere below: register a step

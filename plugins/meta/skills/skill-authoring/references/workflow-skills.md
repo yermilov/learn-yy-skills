@@ -19,6 +19,7 @@ skimmable prose. Every line of the copyable block exists because a real run fail
 | naming the items **1..N** in the block itself | the runner inventing its own coarser list |
 | "register the **conditional** steps too, completing a moot one with that reason" | a branch quietly dropping items, or skipped steps left open — either way an unfinished list stops meaning unfinished work |
 | "**SEARCH** for the tool first" | a host that defers or renames its planner reading as a host that has none |
+| "**anything that creates items** and marks them in progress/completed IS that tool" | the search running, returning the planner, and the runner not recognising it — measured in 3 of 33 runs after the search line alone shipped |
 | "the **SESSION's** own planner, never an external tracker" | run bookkeeping written into somebody's real backlog — an outward action nobody asked for |
 | the reply-list **fallback** | the runner improvising "I'll track it inline", which is indistinguishable in the report from tracking nothing |
 
@@ -37,9 +38,11 @@ gives you — and while work remains keep exactly one in progress:
 Register the conditional steps too: one a branch makes moot is completed WITH THAT REASON, never
 left open — an unfinished list at the end must mean something really is unfinished.
 No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
-its name differs per host. It must be the SESSION's own planner, never an external tracker (Jira,
-Linear, a task app): your bookkeeping is not their backlog. If there truly is none, keep the list in
-your replies — state it once, name each item as you start it, account for every one at the end.
+its name differs per host. Anything that creates items and marks them in progress and completed IS
+that tool, whatever it is called; an empty result for one remembered name is evidence about the name,
+not about the host. It must be the SESSION's own planner, never an external tracker (Jira, Linear, a
+task app): your bookkeeping is not their backlog. If there truly is none, keep the list in your
+replies — state it once, name each item as you start it, account for every one at the end.
 ```
 
 The heading is yours to pick, and so is the sentence that opens the block — a `## Workflow` section

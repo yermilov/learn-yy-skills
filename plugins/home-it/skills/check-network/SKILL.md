@@ -38,9 +38,11 @@ the tool has dependency links mark it **blocked by** these and the caller's rema
 
 **Register them in this session's own todo/plan tool — if you don't see one, SEARCH for it before
 concluding there is none**: on hosts with deferred tools it exists under a name you weren't looking
-for. Never an external tracker; your run bookkeeping is not someone's backlog. If there genuinely is
-none, keep the list in your replies and account for every item at the end — "I'll track it inline"
-with no stated list is precisely the failure this block exists to prevent.
+for, and anything that creates items and marks them in progress and completed IS it — an empty result
+for one remembered name is evidence about the name, not about the host. Never an external tracker;
+your run bookkeeping is not someone's backlog. If there genuinely is none, keep the list in your
+replies and account for every item at the end — "I'll track it inline" with no stated list is
+precisely the failure this block exists to prevent.
 
 1. Measure where the problem is — Wi-Fi, at the affected spot (§1)
 2. Measure next to the router — Wi-Fi (§1)

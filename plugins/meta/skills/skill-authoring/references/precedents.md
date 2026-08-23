@@ -167,11 +167,30 @@ invisible to the agent itself, to the reader, and to any later review.
 **The sequel, one day after those blocks shipped: the very first observed run dropped the list
 anyway.** A remote-control session opened the task-runner skill, reached the new block, and reported
 verbatim — *"No TodoWrite tool in this session — I'll track the lifecycle items inline"* — then
-worked without one. The tool was there. That host exposes the capability under **different names**
-(`TaskCreate` / `TaskUpdate` / `TaskList`) **and defers them**: they are absent from the initial tool
-list and load only on an explicit tool-search, so an agent scanning for a familiar handle sees
-nothing and concludes the host has none. Registering the same list by hand in a later session on that
-host took one search and four calls.
+worked without one. The tool was there **that day**. That host exposed the capability under
+**different names** (`TaskCreate` / `TaskUpdate` / `TaskList`) **and deferred them**: absent from the
+initial tool list, loaded only on an explicit tool-search, so an agent scanning for a familiar handle
+saw nothing and concluded the host had none. Registering the same list by hand in a later session on
+that host took one search and four calls.
+
+**⚠️ Read that as dated, not standing — the same host later had no todo tool at all, and the rule
+below turns on which case you are in.** Measured on a build eight weeks on, from the session's own
+advertised tool list rather than from a search: **294 tools and not one todo tool**, identical across
+every permission mode; setting the vendor's opt-in environment flag and re-running the identical probe
+returned **298 including the three handles**. Both names are compiled into the binary either way, so
+inspecting the shipped bundle proves nothing about your session — only the advertised list does. So
+the capability is not merely renamed-and-deferred; on that host it is **gated off by default**, and a
+careful search then returns nothing because there is nothing.
+
+Which is the trap this precedent creates for its own readers. The finding above was written as a fact
+about a host, and it is the shape §9 warns about — an accurate observation of external state, recorded
+without a date, that the next agent obeys without testing. Its literal descendant, *"an empty result is
+evidence about the name, not about the host,"* tells an agent facing a REAL absence that its own
+correct answer is a mistake, and the honest report becomes indistinguishable from the failure the block
+was written to stop. **The repair is to make the negative decidable rather than deniable: search by
+capability, then by the exact handles, and treat two empty results as a real absence — reported
+plainly, with the fallback taken and every item accounted for.** A rule that can only ever conclude
+"you searched wrong" is not a recognition test.
 
 Two rules come out of it, and the second is the one that bites. **Name the capability, not the
 handle** — "the host's todo/plan tool" — which is only §9's portability rule applied to the block you
@@ -240,6 +259,9 @@ So the instruction that fails is not *look*, it is *know what you are looking at
 search hands it a result set it has no test for, and the wrong test is the one it arrives with: a
 remembered handle. **Give the recognition rule with the search** — anything that creates items and
 marks them in progress and completed IS the tool, whatever it is called; an empty result for one
-remembered name is evidence about the name only. That keeps §9's "name the capability, not the handle"
+remembered name is evidence about the name only. **But give it a floor too, or you have replaced one
+unfalsifiable belief with another**: name the exact handles as the second search and say that two
+empty results settle it, so an agent on a host where the capability is genuinely gated off can reach
+"there is none" and be believed — by itself as much as by its reader. That keeps §9's "name the capability, not the handle"
 intact, because a recognition test is not a handle: it is what makes the capability identifiable on a
 host whose handle you cannot know.

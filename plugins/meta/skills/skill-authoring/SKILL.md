@@ -352,6 +352,7 @@ checklist, a rubric. Without a way to check the output, a skill is just vibes in
 | **Surprise Skill**     | auto-runs destructive/expensive/private actions  | confirm first, or set `disable-model-invocation: true` (§1) — _a skill may be powerful; it must not be sneaky_ |
 | **Decorative Checklist** | a workflow skill's steps get skimmed — the agent does 1, 3 and 7 and calls it done | numbered prose is not a checklist → open the skill with the copyable Step-0 TODO block (§2) |
 | **All-or-Nothing Gate** | a completeness rule makes runs record *nothing* | see below                                                                                             |
+| **Self-Confirming Check** | a capability check that can only ever answer "no", so a fallback becomes the only path | see below                                                                                             |
 
 **All-or-Nothing Gate — write the completeness rule so it gates the CONCLUSION, not the RECORDING.**
 *"Do not write anything unless you have all N sources"* reads as rigour and behaves as data loss: the
@@ -359,6 +360,29 @@ run that falls short discards what it did gather. Split it in two — **recordin
 always allowed and carries an explicit coverage line (`partial pass: 7/16, missing: …`); only the
 **derived conclusion** (the score, the verdict, the published number) waits for full coverage. Then a
 reader can tell "no signal" from "nobody looked". (What it cost once: `references/precedents.md` §6.)
+
+**Self-Confirming Check — never write a capability test whose FAILURE looks like its own answer.**
+A branch of the form *"if tool X isn't in your tool list → fall back to the browser / escalate to the
+human"* is not a test on a host where tools are **deferred**: nothing is in the tool list until
+`ToolSearch` loads it, so the check answers "absent" every time and the fallback becomes the only
+path the skill can take. Measured 2026-08-23 on a brokerage skill whose MCP tools are deferred on
+Claude Code — the reviewing agent's own verdict was that **the failure read as a confirmation, which
+is why it survived so long**: every autonomous run fell through to a browser login only the user could
+complete, while the check appeared to be correctly detecting a problem that was not there.
+**The fix is to make the probe positive:**
+name the load step (`ToolSearch "select:<tool>"`) as part of the test, and only treat the capability
+as missing if the load itself comes back empty.
+
+**The same defect has a mirror image, and it is worse: a check with no floor tells a correct agent it
+is wrong.** If a skill asserts a capability exists and offers no way to conclude otherwise, a
+genuinely absent one reads as agent error indefinitely — agents reported *"no todo tool exists on this
+host"* and the skill answered that they had not looked hard enough. They were right: on Claude Code
+2.1.241 the todo tools are **flag-gated off** (`CLAUDE_CODE_ENABLE_TODO_TOOLS=1` exposes three; the
+old `TodoWrite` name is dead), so the honest answer was unreachable by construction. **Give every
+absence a floor** — "two empty probes close the question; that is a fact about this host, not your
+mistake" — and **date the host claim**, because both of these are transitional states, not standing
+truths. A transitional host state written down as a permanent rule is the `Rotten Date` anti-pattern
+wearing a capability check's clothes.
 
 ## 7. Test it — anecdotes aren't evals
 

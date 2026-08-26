@@ -317,7 +317,22 @@ because SKILL.md is Markdown.
 - **`scripts/`** — deterministic work where exactness matters or the model makes mechanical mistakes
   (validate frontmatter, check the tree, convert formats, lint, parse logs). Give them `--help` and
   **verbose, LLM-readable errors** so the agent can debug a failure instead of staring at exit-1. Not
-  for judgment ("decide the positioning").
+  for judgment ("decide the positioning"). Three rulings, each of which has already cost a run:
+  - **TypeScript run with bun is the default language.** Python when the work needs a library only
+    Python has; anything else — bash included — only for a reason you write down in the file.
+  - **A script may be a pure transformation; it may not supervise a long-lived process, keep state
+    between invocations, or retry.** Any of those three makes it a program, and a program belongs in
+    a real codebase with types, tests and a review history — not under `skills/`. This is a test of
+    shape, **not of size**: an 865-line converter is fine where a 473-line orchestrator was not.
+  - **A documented command must reach a runnable form using only what the agent already has** — from
+    any working directory. Two acceptable shapes: a name already on `PATH`, or an explicit
+    placeholder the agent replaces with a **literal** value it knows (the directory it loaded the
+    skill from). Both are forbidden from depending on unset state: never a repo-relative path, and
+    never a variable like `$SKILL_DIR`, which is **not set** in the agent's shell — a command built
+    from it resolves to `/scripts/…` and fails exactly like the bare path it replaced. Mark a
+    placeholder as one, and quote it, so a substituted path containing spaces still runs. Do not
+    assume a plugin's `bin/` reaches `PATH` — that is host-specific. When you fix an invocation,
+    **replace** the old form rather than leaving both.
 - **`assets/`** — reusable non-instruction files: templates, logos, themes, sample outputs.
 
 **Prefer a reference in CODE form over the same thing in prose** — an artifact the model can read in
@@ -328,7 +343,13 @@ reference form for *taste*, letting verifier agents check output against your st
 re-explaining it. Reach for prose only when no artifact form exists.
 
 **Strong opinion:** every non-trivial skill ships **at least one validation mechanism** — a script, a
-checklist, a rubric. Without a way to check the output, a skill is just vibes in Markdown.
+checklist, a rubric. Without a way to check the output, a skill is just vibes in Markdown. Note that
+this checks the skill's OUTPUT and is not a test of the script itself; scripts under `skills/` have
+no test runner, which is a reason to keep them small rather than a reason to relax.
+
+📖 **`references/skill-scripts.md` before you add or grow a `scripts/` file** — why the language
+order is what it is, the bash failures that read as successes, the measured cost of an unfindable
+command (16 sessions), and how to write an error a model can act on.
 
 ## 6. Anti-patterns → the fix
 
@@ -515,10 +536,18 @@ on one but not the other is the usual portability failure.
 - **`scripts/audit-frontmatter.ts`** — parses every `SKILL.md` frontmatter as YAML and reports
   description length against the 1024 cap, missing boundaries, and name↔directory mismatches. Run it
   before shipping a description change and at the start of any library-wide sweep (§1) — never
-  hand-count with a grep. Resolve the path **relative to this `SKILL.md`**, not to your working
-  directory, and pass the marketplace root as the argument: `bun run
-  <dir-of-this-file>/scripts/audit-frontmatter.ts <marketplace-root>`. When the skill is loaded from a
-  plugin cache, that directory is the cached copy — still fine, it only reads the root you pass.
+  hand-count with a grep. It takes the marketplace root as its argument:
+
+  ```bash
+  bun run "SKILLDIR/scripts/audit-frontmatter.ts" "MARKETPLACE_ROOT"
+  ```
+
+  ⚠️ **Substitute both placeholders with LITERAL paths before running it** — `SKILLDIR` is the
+  directory you loaded this `SKILL.md` from, which you already know, and it is deliberately not a
+  shell variable: `$SKILL_DIR` does not exist in your shell, and a command built from an unset
+  variable resolves to `/scripts/…` and fails as surely as a bare relative path (§5). When the skill
+  is loaded from a plugin cache, `SKILLDIR` is that cached copy — still fine, it only reads the root
+  you pass.
 
 ## In this marketplace
 

@@ -22,6 +22,13 @@ guide: how to make the prose itself good.
 > This skill practices what it preaches — its own description, structure, and length are meant as a
 > worked example. If you change it, keep it that way.
 
+Length verdict (§2): 2026-08-30, tested section by section. The movable depth is out — the worked
+precedents, the script-writing depth behind §5 and the workflow mechanics behind §2 are all in
+`references/`. What stays inline is every section's rulings and branch conditions, which §2 forbids
+relocating because an agent needs them **before** it can decide whether to open a file. That is the
+single reason each remaining section failed the move-it-out test. Re-argue it if you disagree;
+don't re-derive it.
+
 ## The one job
 
 A skill has exactly three jobs, in order. Everything below serves them; anything that doesn't is cut:
@@ -150,9 +157,23 @@ Three context tiers — design for the loading path:
 The biggest structural mistake is putting tier-3 material in tier 2. Once a skill triggers, its body
 **stays in context for the rest of the session**, so every wasted line is paid for repeatedly.
 
-- **Length:** most bodies want **~100–250 lines**; treat **300+ as a warning sign**; the ceiling is
-  ~500 — don't aim for it. Past it, add a layer of hierarchy and point outward. **Workflow skills
-  budget per step instead** — see the subsection at the end of this section.
+- **Length:** most bodies want **~100–250 lines**; treat **300+ as a warning sign**; **~500 is where
+  length stops being free and has to be paid for section by section.** Past it, add a layer of
+  hierarchy and point outward — then run one falsifiable test on **every section still inline: could
+  its depth move to a reference, leaving one line of ruling behind?** If it could, that section is
+  bloat and the body **fails**; the only answer that passes is that moving it would strand a ruling
+  or a branch condition, which §2 forbids moving. "It is all important" is not that answer, and a
+  body that cannot name a surviving section has not been examined — it has been excused. **A body
+  `SKILL.md` over 500 lines then owes a one-line verdict** recording that the test was run and why
+  what is left had to stay, so the next reviewer re-argues it instead of re-deriving it; at 500 or
+  fewer nothing is owed. Per §8 that mandate is a string, so it gets a fixed marker and an exact
+  cutoff: the verdict is a line **starting** `Length verdict (§2):`, the cutoff is `wc -l` over the
+  whole file — frontmatter included, which is what makes it mechanical — and the audit is
+  `grep -L '^Length verdict [(]§2[)]:'` over the files above it. Two details are load-bearing: the
+  **anchor** (unanchored, any file that merely *quotes* this rule passes it) and the **bracketed
+  parentheses**, which mean the same literal in both regex dialects — written bare they are grouping
+  under ERE, and the audit then reports every conforming file as missing. **Workflow skills budget per step instead** —
+  see the subsection at the end of this section.
 - **Body skeleton that works:** `When to use` (+ when not) → `Goal`/success state → `Workflow` →
   `Decision rules` (If X, do Y) → `Output` → `Quality checks` → `Bundled resources`.
 - **Signpost with activation conditions**, never "see the references": write `Read
@@ -217,11 +238,11 @@ so*, not *decomposable*; below that line the item stays whole and **its close ca
 enumeration**. Unlike the marker, this is a **property**: no string detects it, so its audit is that
 per-item test plus checklist item 9 (§8 says why the distinction matters).
 
-**Length: a workflow skill is the legitimate exception to the ~100–250 default** — not to the ~500
-ceiling. It carries N steps, each a small task skill, so budget **per step** rather than counting the
-file. The tier-2 cost doesn't change, so past ~500 lines every step still inline owes you a reason its
-depth isn't in a reference: **one file per deep step**, keeping the step, its order, its branch
-conditions and its rulings inline.
+**Length: a workflow skill is the legitimate exception to the ~100–250 default** — not to the
+over-500 test. It carries N steps, each a small task skill, so budget **per step** rather than counting the
+file. The tier-2 cost doesn't change, so past 500 lines a workflow owes the same per-section test and
+the same `Length verdict (§2):` line as anything else — applied per step: **one file per deep step**,
+keeping the step, its order, its branch conditions and its rulings inline.
 
 📖 **`references/workflow-skills.md` before you write the step list** — the worked block to copy, the
 body skeleton for this kind, and the nesting wording for both shapes of todo tool (your steps add to
@@ -386,24 +407,19 @@ reader can tell "no signal" from "nobody looked". (What it cost once: `reference
 A branch of the form *"if tool X isn't in your tool list → fall back to the browser / escalate to the
 human"* is not a test on a host where tools are **deferred**: nothing is in the tool list until
 `ToolSearch` loads it, so the check answers "absent" every time and the fallback becomes the only
-path the skill can take. Measured 2026-08-23 on a brokerage skill whose MCP tools are deferred on
-Claude Code — the reviewing agent's own verdict was that **the failure read as a confirmation, which
-is why it survived so long**: every autonomous run fell through to a browser login only the user could
-complete, while the check appeared to be correctly detecting a problem that was not there.
-**The fix is to make the probe positive:**
-name the load step (`ToolSearch "select:<tool>"`) as part of the test, and only treat the capability
-as missing if the load itself comes back empty.
+path the skill can take. **The fix is to make the probe positive:** name the load step
+(`ToolSearch "select:<tool>"`) as part of the test, and only treat the capability as missing if the
+load itself comes back empty. (What it cost, and why it survived so long: `references/precedents.md` §10.)
 
 **The same defect has a mirror image, and it is worse: a check with no floor tells a correct agent it
 is wrong.** If a skill asserts a capability exists and offers no way to conclude otherwise, a
-genuinely absent one reads as agent error indefinitely — agents reported *"no todo tool exists on this
-host"* and the skill answered that they had not looked hard enough. They were right: on Claude Code
-2.1.241 the todo tools are **flag-gated off** (`CLAUDE_CODE_ENABLE_TODO_TOOLS=1` exposes three; the
-old `TodoWrite` name is dead), so the honest answer was unreachable by construction. **Give every
-absence a floor** — "two empty probes close the question; that is a fact about this host, not your
-mistake" — and **date the host claim**, because both of these are transitional states, not standing
-truths. A transitional host state written down as a permanent rule is the `Rotten Date` anti-pattern
-wearing a capability check's clothes.
+genuinely absent one reads as agent error indefinitely — the agent's honest report then becomes
+indistinguishable from never having looked. **Give every absence a floor** — "two empty probes close
+the question; that is a fact about this host, not your mistake" — and **date the host claim**,
+because both of these are transitional states, not standing truths: the worked example behind this
+rule has already flipped twice, most recently back to *present* (`references/precedents.md` §10). A
+transitional host state written down as a permanent rule is the `Rotten Date` anti-pattern wearing a
+capability check's clothes.
 
 ## 7. Test it — anecdotes aren't evals
 
@@ -444,6 +460,13 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
     from what reads best, or you have written yourself a rollout you didn't budget for. Pair it with
     the **inventory of skills the rule applies to**, or the grep cannot tell *missing* from *not
     applicable*. The grep is a shortlist; the inventory is the verdict.
+    ⚠️ **Read the filenames `grep -L` prints — never gate on its exit status**, which is not
+    portable across `grep` implementations (`references/precedents.md` §9).
+    ⚠️ **Later drift is repaired in the SKILLS, never by widening the pattern.** A skill that does
+    the right thing will eventually say so in a phrasing your forms miss — that is a real marker
+    failure, not a false alarm — and the tempting fix, admitting one more form,
+    is unbounded and destroys the one property that made the marker a check. Rewrite that skill's
+    sentence to a marker instead (`references/precedents.md` §9).
   - **A requirement that is a PROPERTY** no string can express — "each item covers one
     independently-skippable thing", "the branch condition is in the body" — has no marker, so **say
     so and name the check that enforces it instead**: a line in the pre-ship checklist, and a named
@@ -522,7 +545,8 @@ on one but not the other is the usual portability failure.
 9. **Workflow skill?** Does it open with the copyable **Step-0 TODO block** carrying a marker
    sentence verbatim, does every item resolve to a named place in the body (and vice-versa), is no
    item a **bundle of independently-skippable checks**, and is every deep step's evidence in
-   `references/`? Length is judged **per step** *and* still against the ~500-line ceiling (§2).
+   `references/`? Length is judged **per step** — and past 500 lines the body carries a
+   `Length verdict (§2):` line.
 
 ## Bundled resources
 
@@ -533,10 +557,16 @@ on one but not the other is the usual portability failure.
 - **`references/workflow-skills.md`** — the nesting mechanics for both shapes of todo tool, and a
   worked Step-0 block. Read it when your workflow skill can be invoked by another one, or when the
   copyable block above needs filling in for a real procedure.
+- **`references/skill-scripts.md`** — the depth behind §5's `scripts/` bullet: why TypeScript+bun is
+  the default language, the line a script may not cross, and how a documented command reaches a
+  runnable form from any working directory. Read it before you add or grow a `scripts/` file.
 - **`scripts/audit-frontmatter.ts`** — parses every `SKILL.md` frontmatter as YAML and reports
-  description length against the 1024 cap, missing boundaries, and name↔directory mismatches. Run it
-  before shipping a description change and at the start of any library-wide sweep (§1) — never
-  hand-count with a grep. It takes the marketplace root as its argument:
+  description length against the 1024 cap, missing boundaries, name↔directory mismatches, and
+  frontmatter that will not parse. **It exits 1 on the defects a machine can be sure of, so read the
+  exit code, not just the numbers** — and note that a skill in the unreadable bucket is counted in
+  *none* of the others, so a parse failure silently shrinks the over-cap count. Run it before
+  shipping a description change and at the start of any library-wide sweep (§1) — never hand-count
+  with a grep. It takes the marketplace root as its argument:
 
   ```bash
   bun run "SKILLDIR/scripts/audit-frontmatter.ts" "MARKETPLACE_ROOT"

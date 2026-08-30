@@ -231,6 +231,26 @@ that added the rule against it. Re-measuring and adopting the two phrasings alre
 coverage to 20 of 20 with no edits to anyone else's skill. Hence: **choose the marker from what
 conforming skills already say.**
 
+**Drift did not stop when the marker was named — it reappeared in a form the marker missed.** Two
+months after the two-form rule shipped, the same library held three skills carrying a fully
+working Step-0 block in a *fourth* phrasing (`"Register these now, before <X>, in this session's own
+todo/plan tool"` — neither documented sentence as a substring). `grep -L` flagged all three, and it
+was **right to**: once the marker is mandatory, carrying a working block in an undocumented wording
+is a real conformance failure, not a false alarm. What the flag does not tell you is *which* failure,
+and that is the trap — read it as "no Step-0 block here" and you write a second block on top of a
+working one. It means **the marker is missing**, so the repair is a one-sentence rewording. The
+tempting alternative — admit a third form so the flags go away — is the one to refuse: each
+admission is unbounded and dissolves the property that made the marker checkable at all. Repair the
+skills, not the pattern.
+
+**And the audit command has one portability trap of its own: `grep -L`'s EXIT STATUS is not
+portable, while its output is.** Measured 2026-08-30 on one machine: BSD `grep -L <pattern> <file>`
+and `ugrep -L` — which some agent harnesses transparently substitute for `grep` — printed the **same**
+file list and returned **opposite** exit codes (BSD 1 / ugrep 0 for a non-matching file). A sweep
+wired to `$?` therefore inverts depending on which implementation is on `PATH`, silently, while still
+printing the correct answer on screen. This bit the review that wrote the rule: its own negative
+control reported the audit broken when only the control was. Read the filenames.
+
 **A second miss in the same pass came from the standard itself moving.** Several of the rules the
 review was meant to apply had been added to this guide *after* the file under review was written —
 and after its previous review. An agent applying "the standard" from memory applies the rules it
@@ -265,3 +285,31 @@ empty results settle it, so an agent on a host where the capability is genuinely
 "there is none" and be believed — by itself as much as by its reader. That keeps §9's "name the capability, not the handle"
 intact, because a recognition test is not a handle: it is what makes the capability identifiable on a
 host whose handle you cannot know.
+
+## 10. Two capability checks that could only answer "no", and one that could only answer "yes" (§6)
+
+**The self-confirming half.** Measured 2026-08-23 on a task skill backed by an MCP tool that the host
+*defers*: nothing is in the tool list until a tool-search loads it, so the skill's check — *"if the
+tool isn't in your tool list, fall back to the browser"* — answered "absent" on every run. Every
+unattended run therefore fell through to a browser sign-in no unattended run can complete. The
+reviewing agent's own verdict names why it lasted: **the failure read as a confirmation**, so the
+check appeared to be correctly detecting a problem that was not there. Nobody debugs a check that is
+agreeing with itself.
+
+**The mirrored half, and the reason the rule insists on a date.** The same library's todo-tool
+guidance ran the other way — it asserted the capability existed and offered no way to conclude
+otherwise, so agents meeting a genuine absence were told they had not looked hard enough. That claim
+has now moved three times on ONE host, which is the whole argument for stamping it:
+
+| Measured | State |
+| --- | --- |
+| 2026-06 | present, but under unfamiliar handles and **deferred** — a search for the remembered name found nothing |
+| 2026-08-23 (v2.1.241) | **absent by default** — 294 advertised tools and no todo tool in any permission mode; the vendor's opt-in environment flag returned 298 including the three handles |
+| 2026-08-30 (v2.1.251) | **present again** — the same three handles advertised, on a host where that opt-in flag is enabled |
+
+Nothing about the skill changed across those three rows; the host did. A rule written on any one of
+them, undated, is wrong for two-thirds of its life — and each time it is wrong it converts a correct
+agent into one that distrusts its own reading. Hence both halves of the ruling in §6: **make the
+probe positive** (name the load step, and treat only an empty *load* as absence), and **give the
+absence a floor** (two empty probes settle it, and that is a fact about the host, not the agent's
+mistake) — then date the row so the next reader knows to re-measure rather than to obey.

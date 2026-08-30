@@ -9,6 +9,8 @@
  *   - whether the DESCRIPTION carries a `Do not use for…` boundary — read off the parsed field, not
  *     the file, because the same phrase in the body is not a boundary
  *   - `name` vs its directory
+ *   - frontmatter that will not parse at all — which is counted in NONE of the other buckets, so it
+ *     is announced up front rather than only at the end
  *
  * The boundary regex is a SHORTLIST, not a verdict: real boundaries phrase themselves freely
  * ("Do NOT use it to…", "— that's <sibling>"), so read what it flags before believing it.
@@ -120,6 +122,17 @@ if (asJson) {
 } else {
   const line = (r: Row) => `  ${String(r.length).padStart(4)}  ${r.path}`
   console.log(`${rows.length} skills under ${root}\n`)
+
+  // A skill whose frontmatter will not parse has no description to measure, so it is counted in NONE
+  // of the buckets below. Say so up here: a reader who takes "over the cap: 2" at face value while a
+  // parse failure hides a third one has been under-reported by the very tool that was meant to stop
+  // them hand-counting. (Measured: one library's only unparseable skill also had a 1232-char
+  // description, absent from the over-cap list.)
+  if (broken.length)
+    console.log(
+      `${broken.length} of these have UNREADABLE frontmatter and are counted in none of the buckets\n` +
+        `below — a parse failure silently shrinks every number here. They are listed at the end.\n`,
+    )
 
   // The runtime accepts an over-cap description and silently truncates it — it is the packaged-skill
   // validator that refuses one. Either way the tail, where the boundary lives, is what you lose.

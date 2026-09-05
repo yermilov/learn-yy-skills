@@ -450,6 +450,22 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
   in a review — and the damage is **directional**: it misleads the reader working in a *different*
   project, who follows another project's hardcoded paths as if they were their own. Reconcile it in
   whichever direction is true — narrow the claim, or move the detail out and leave a placeholder.
+- **A fix aimed at one STEP does not bind the other steps that can produce the same bug — after you
+  patch, grep your OWN file for every route to that failure.** The rollout bullet below is the same
+  gap one level out (other skills); this one is easier to miss precisely because the file you just
+  edited feels handled. The shape, measured on a long workflow skill in 2026: a step that posts to
+  an API grew a correct, emphatic ⚠️ that one request field is mandatory — and it went into **that
+  step only**, while a later step in the same file still said "paste the contents into a comment"
+  and named neither the field nor the endpoint. Agents kept hitting the identical 400 from the
+  second step, and the run that finally diagnosed it put the cost plainly: the same bug, from the
+  same instructions, will simply happen again. **The check is mechanical and is one command** — grep
+  your file for the endpoint, flag or tool the fix names, and ask which OTHER steps reach it; a hit
+  list that clusters in one section while another section plainly does the same operation IS the
+  finding. Patch them in the same change, or point them all at one canonical recipe.
+  ⚠️ **And treat "this warning now appears in three places" as evidence the fix belongs one layer
+  DOWN** — in the server, the tool schema, or a default — where it retires every copy at once.
+  Documenting a trap N times is a rollout you keep paying for, and every copy is a place the next
+  edit can forget.
 - **A mandatory rule needs an audit and a rollout, or it binds only the skill you were editing.**
   Say, in the same change, **how conformance is detected** and **who gets swept**:
   - **A requirement that IS a string** (a block, a heading, a named section) gets a **fixed marker**

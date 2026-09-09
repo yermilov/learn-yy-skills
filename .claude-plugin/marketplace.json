@@ -17,7 +17,7 @@
     {
       "name": "home-it",
       "source": "./plugins/home-it",
-      "description": "Home IT skills. check-network: a repeatable playbook to diagnose a slow home network end-to-end (measure throughput / bufferbloat / packet loss / Wi-Fi signal, localize the bottleneck across ISP plan → router → Wi-Fi path → client, inspect the router UI) and rank fixes — wired backhaul first, a second wireless extender never."
+      "description": "Home IT skills. check-network diagnoses home-network speed and DNS failures: compare system / router / public resolvers, inspect negative caches / upstreams / filters, measure throughput / latency / loss / Wi-Fi signal, localize the failing layer, inspect the router UI, and verify one fix at a time."
     }
   ]
 }

@@ -1,22 +1,23 @@
 ---
 name: check-network
 description: >-
-  Diagnose a slow home network end-to-end and recommend the highest-leverage fix. Use when the
-  internet or Wi-Fi feels slow — "make my home network/Wi-Fi faster", "speeds are way below my
-  plan", "slow at my desk", "should I buy an extender / new router / mesh?", "bufferbloat", "lag on
-  calls", «зроби домашню мережу швидшою», «інтернет повільний», «повільний Wi-Fi». Runs a repeatable
-  playbook: measure from the machine (throughput, idle-vs-loaded latency/bufferbloat, packet loss,
-  Wi-Fi signal & negotiated rate), localize the bottleneck across four layers (ISP plan → router →
-  Wi-Fi path → client), inspect the router admin UI, then rank fixes — wired backhaul first, a second
-  wireless extender never. Not for public/office networks you don't administer, and not for
-  server-side app latency (that's profiling, not this).
+  Diagnose home-network speed and DNS failures end-to-end and apply or recommend the
+  highest-leverage fix. Use when Wi-Fi is slow, latency spikes, a domain returns NXDOMAIN only at
+  home, public DNS works while the router fails, or the user asks about an extender / router / mesh
+  — “speeds are below my plan”, “DNS is broken”, “site works on mobile data”, “bufferbloat”,
+  «інтернет повільний», «роутер не резолвить домен», «помилка DNS». Measures the failing path,
+  distinguishes router/cache/upstream/client causes, inspects the router UI, and verifies one change
+  at a time. Not for public/office networks you don't administer or server-side app latency.
 ---
 
-# check-network — make a home network faster
+# check-network — diagnose and fix a home network
 
-A slow home network is almost never one thing. Work it as **four layers** and measure before
-recommending — the fix that feels obvious (buy an extender) is usually the *worst* option. The goal
-of a session is a **ranked recommendation backed by numbers**, not a shopping spree.
+A home-network failure is almost never one thing. First classify it as **performance** or
+**name-resolution/reachability**. For performance, work the four layers below and measure before
+recommending — the fix that feels obvious (buy an extender) is usually the *worst* option. For an
+exact host that fails only at home, take the DNS fast path before running irrelevant speed tests.
+The goal is a verified repair or a ranked recommendation backed by measurements, not a shopping
+spree.
 
 The four layers, outermost to innermost:
 
@@ -44,23 +45,52 @@ your run bookkeeping is not someone's backlog. If there genuinely is none, keep 
 replies and account for every item at the end — "I'll track it inline" with no stated list is
 precisely the failure this block exists to prevent.
 
-1. Measure where the problem is — Wi-Fi, at the affected spot (§1)
-2. Measure next to the router — Wi-Fi (§1)
-3. Measure wired into the router over Ethernet (§1) — **its own item because it is the control, and
+1. Classify the symptom as performance or DNS/reachability
+2. Run the DNS fast path when a host fails to resolve (§ DNS-specific fast path)
+3. Measure where the problem is — Wi-Fi, at the affected spot (§1)
+4. Measure next to the router — Wi-Fi (§1)
+5. Measure wired into the router over Ethernet (§1) — **its own item because it is the control, and
    the control is what gets skipped**; one "measure the baseline" item would hide that
-4. Localize the bottleneck to a layer (§2)
-5. Inspect the router admin UI (§3)
-6. Diagnose and recommend up the fix ladder, ranked and backed by the numbers (§4)
+6. Localize the bottleneck to a layer (§2)
+7. Inspect the router admin UI (§3)
+8. Diagnose, repair or recommend, then verify (§4)
 
-Items 1–3 are one item per **position**, not per metric — but each closes naming the four
+Items 3–5 are one item per **position**, not per metric — but each closes naming the four
 measurements §1 asks for at that spot (throughput+bufferbloat · loss+latency · link quality/rate ·
 client sanity), or which one you skipped and why. "Measured the desk" without that list is a row of
-the table you cannot fill. Same for 4 and 5: close item 4 naming which layer each gap pointed at, and
-item 5 naming the router settings you actually read — an unenumerated "looked at the router" hides
-the one setting that was the answer.
+the table you cannot fill. On the DNS branch, close item 2 naming system/router/public answers, the
+negative TTL, configured upstream/filter findings, and the end-to-end control — or which remained
+unreadable. Close item 6 naming which layer each gap pointed at, and item 7 naming the router settings
+you actually read; an unenumerated "looked at the router" hides the one setting that was the answer.
 
 A step a branch makes moot — no admin access to the router, say — is completed with that reason, not
 left open.
+
+## DNS-specific fast path
+
+Use this branch when one hostname returns `NXDOMAIN`, `SERVFAIL`, or times out at home while other
+sites work. Do not infer “the router blocks the domain” from one cached answer:
+
+1. Query the exact hostname through the operating system's normal resolver, the LAN gateway
+   explicitly, and two public recursive resolvers. Record status, answer chain, TTL and timestamp.
+   The comparison separates client state from the router/upstream path.
+2. Query the affected zone's SOA and read the negative-cache TTL from the authority response. If the
+   router/public disagreement disappears within that window, report a stale negative answer as an
+   **inference**, not a proven filter. Re-test the exact gateway path several times; a recovered cache
+   is not evidence that a configuration write occurred.
+3. If the gateway still fails while both public controls work, inspect the router UI for its WAN DNS
+   servers, DNS proxy/cache, parental controls, security filtering and custom blocklists. Query each
+   configured upstream directly when possible: failing there localizes the defect upstream; passing
+   there localizes it to the router/filter/cache.
+4. Change one thing only. Prefer clearing the bad cache first. If the configured upstream is the
+   defect, set a known public resolver pair supported by the owner; do not rewrite DNS blindly after
+   a transient answer has already recovered. Re-test before making a second change.
+5. Verify both DNS and the real service from the affected client (for example, an HTTPS request to
+   the hostname). Only then remove temporary per-device DNS overrides and repeat the same controls on
+   that device. A laptop passing does not prove a phone's override was actually removed.
+
+Router credentials remain owner-controlled: use an already-authenticated session, or have the owner
+sign in and hand it back. Never extract or type their router password yourself.
 
 ## 1. Measure the baseline (from the affected device)
 

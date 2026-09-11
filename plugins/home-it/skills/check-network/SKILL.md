@@ -59,9 +59,10 @@ Items 3–5 are one item per **position**, not per metric — but each closes na
 measurements §1 asks for at that spot (throughput+bufferbloat · loss+latency · link quality/rate ·
 client sanity), or which one you skipped and why. "Measured the desk" without that list is a row of
 the table you cannot fill. On the DNS branch, close item 2 naming system/router/public answers, the
-negative TTL, configured upstream/filter findings, and the end-to-end control — or which remained
-unreadable. Close item 6 naming which layer each gap pointed at, and item 7 naming the router settings
-you actually read; an unenumerated "looked at the router" hides the one setting that was the answer.
+negative TTL, configured upstream/filter findings **with the pass count of each probe series**, and
+the end-to-end control on the affected device — or which remained unreadable. Close item 6 naming
+which layer each gap pointed at, and item 7 naming the router settings you actually read; an
+unenumerated "looked at the router" hides the one setting that was the answer.
 
 A step a branch makes moot — no admin access to the router, say — is completed with that reason, not
 left open.
@@ -82,15 +83,52 @@ sites work. Do not infer “the router blocks the domain” from one cached answ
    servers, DNS proxy/cache, parental controls, security filtering and custom blocklists. Query each
    configured upstream directly when possible: failing there localizes the defect upstream; passing
    there localizes it to the router/filter/cache.
+
+   ⚠️ **Probe each upstream as a SERIES, never once — an intermittent upstream is precisely what
+   produces a fault nobody can reproduce.** Measured 2026-09-09: the first direct UDP query to the
+   ISP's primary resolver timed out while its secondary and both public controls answered instantly;
+   every later probe to that same primary succeeded. A single probe would have called that upstream
+   dead, and a single probe a minute later would have called it healthy. Run ~20 queries per
+   configured upstream and report the **pass count** (`19/20`) rather than a verdict. Note also what
+   the WAN mode tells you: on a **Static IP** WAN the DNS servers are values somebody typed, not a
+   DHCP lease — so they persist across reboots and are yours to read back after any change.
 4. Change one thing only. Prefer clearing the bad cache first. If the configured upstream is the
    defect, set a known public resolver pair supported by the owner; do not rewrite DNS blindly after
    a transient answer has already recovered. Re-test before making a second change.
+
+   ⚠️ **A failure in the first seconds after applying a router change is not the change failing.**
+   Measured 2026-09-09: immediately after new WAN DNS servers were written, the router timed out once
+   while it re-established its upstreams, then answered 20/20. Let the router settle, then re-test as
+   a series — and if the very first probe fails, probe again before reverting. Reverting on that one
+   answer is how a correct fix gets undone and the original fault gets re-reported as unsolvable.
 5. Verify both DNS and the real service from the affected client (for example, an HTTPS request to
    the hostname). Only then remove temporary per-device DNS overrides and repeat the same controls on
    that device. A laptop passing does not prove a phone's override was actually removed.
 
+   **Record an override's original value at the moment you set it, and read the restore back.**
+   "Automatic" is a *mode*, not a blank, so restoring the wrong one leaves the workaround silently in
+   place. On Android, Private DNS is two settings keys reachable over ADB — `private_dns_mode`
+   (`off` / `opportunistic`, which is what the UI calls Automatic / `hostname`) and
+   `private_dns_specifier` (the host, e.g. `dns.google`) — and restoring Automatic means
+   `opportunistic` **with the specifier cleared**, confirmed by reading both keys afterwards rather
+   than by trusting the write.
+
+   ⚠️ **Then prove the device is testing the path you actually fixed.** A phone that resolved the
+   hostname over **mobile data**, or through a resolver it still has pinned, passes this step while
+   proving nothing about the router. Before believing the result, confirm the device holds a LAN
+   address and that the resolver it is using is the gateway. Measured 2026-09-09, the two facts that
+   made the check mean something: Wi-Fi address `192.168.0.104`, DNS server `192.168.0.1` — without
+   them the `HTTP 200` that followed would have been an answer about somebody else's network.
+
 Router credentials remain owner-controlled: use an already-authenticated session, or have the owner
 sign in and hand it back. Never extract or type their router password yourself.
+
+⚠️ **So ask for that session in the FIRST minutes of the run, not the last.** Read-only diagnosis and
+the login request are independent, so send the request early and keep measuring while it is answered.
+Measured 2026-09-09: a run worked the whole comparison above, reached step 3, found the admin page
+asking for the router's local password — and ended there. The task sat `blocked` for **three hours**
+waiting for a login that could have been requested at minute one, and the next run had to re-establish
+the state the first had already measured.
 
 ## 1. Measure the baseline (from the affected device)
 
@@ -238,3 +276,10 @@ ranks last. Many extenders already have a gigabit port + AP mode, so the fix oft
   router** location, and check **packet loss to the gateway**.
 - Adding a **wireless** extender/mesh node to "extend range" — it usually makes throughput worse.
 - Changing several router settings at once — change one, re-measure, keep or revert.
+- Declaring an intermittent DNS fault repaired — or a configured upstream healthy — on a **single**
+  passing query. Intermittency is the one failure mode a lone probe cannot see, in either direction.
+- Removing a per-device DNS override without first confirming the device is on the home network and
+  using the gateway as its resolver. A pass over mobile data is not a pass.
+- Treating "the symptom stopped reproducing" as "the symptom is fixed". A recovered answer means the
+  run's job has changed from repair to **capturing the configuration** — upstreams, filters, WAN mode
+  — because that record is what makes the next occurrence diagnosable instead of a fresh mystery.

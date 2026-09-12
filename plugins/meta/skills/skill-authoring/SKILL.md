@@ -195,6 +195,34 @@ The biggest structural mistake is putting tier-3 material in tier 2. Once a skil
   exists?"* If the second, hoist one line of ruling into the body and leave the evidence behind.
   (What it cost: `references/precedents.md` §5.)
 
+### A safeguard goes NEXT TO the action, not in the preamble — and deliberate duplication is the mechanism
+
+A warning sitting several screens above the step it governs mostly does not fire: the model reaches
+that step with momentum already built. **Measured externally, in an adjacent setup:** Anthropic, «An
+alignment assessment of recent cybersecurity incidents» (09.09.2026) — a scope reminder placed **last
+in context** stopped the behaviour **90%** of the time; the *same* reminder inserted **three turns
+before** the action stopped it **40%** of the time. That is a measurement on models taking harmful
+actions in a CTF setting, not on agents reading a `SKILL.md`, so carry it as an order of magnitude
+and an argument, never as a guarantee about our files.
+
+What follows for the author:
+
+- a ⚠️ block lives **inside the step it governs**, not only in a general section at the top;
+- **deliberate duplication is allowed and often mandatory** — a short warning at the point of the
+  mistake, plus the full measurement in a reference section below. A browser-automation skill in
+  this marketplace does exactly that for a scroll call that silently does nothing, and says so in
+  the file: *"Full measurement in **Browser instrument traps**; it is 700 lines below, which is why
+  the warning is repeated at the point you would actually make the mistake."* A long workflow skill
+  does the same for a keep-alive cadence its middle steps would otherwise drift past.
+  **Do not "remove the duplication" in such places** — the distance to the action IS the mechanism
+  you would be breaking;
+- if a step is long, or another tool (a browser, a test suite, a build) sits between the warning and
+  the action, restate the rule immediately before the action;
+- the same goes for `CLAUDE.md`: a rule about a specific command belongs beside that command.
+
+This does not license repeating everything. It licenses repeating the one line that changes what the
+agent does, at the moment it would do it.
+
 ### Workflow skills — the step list has to be executable, not decorative
 
 A workflow skill's body *is* a procedure, so several defaults change for this kind.
@@ -437,6 +465,18 @@ You don't know a skill helps until you compare **with-skill vs. no-skill** on th
 
 - **A stale skill is worse than none** — it actively commands deprecated behaviour. Isolate volatile
   facts (API versions, prices, policies), stamp them verified-on, and review skills like dependencies.
+- **Write every measurement with its BOUNDARY attached — "what this does not establish" — or it
+  reads as a conclusion and gets obeyed as one.** A number in a skill file has no author standing
+  beside it to say how far it generalises, so the next agent takes the widest reading available.
+  Two shapes of damage, both measured in one window: a session concluded «на цьому хості зображення
+  взагалі не рендеряться» from one failed page, and a later run went blind for a whole session on
+  that line; and a `curl` refusal on one host became «GitHub API не працює» when the true scope was
+  *this host, this tool, and not the same on the next session*. The fix is a habit, not a format:
+  after each measured claim, finish the sentence *"…which does not establish …"*. In a table, the
+  `stonkfly` repo's `validation.md` does it as a second column — **Observed result | What it does
+  not establish** — and that shape is worth stealing for any skill whose output is a finding (a
+  health check, a perf sweep, a research dive). A measurement whose boundary you cannot state is a
+  measurement you have not finished reading.
 - **When you review a skill, RUN the commands it prescribes — don't read them.** Prose review cannot
   see this rot: the command still exists and still looks right while privilege requirements, renamed
   flags and moved output formats have quietly broken it. Execute each on a real machine, and where one

@@ -286,6 +286,16 @@ empty results settle it, so an agent on a host where the capability is genuinely
 intact, because a recognition test is not a handle: it is what makes the capability identifiable on a
 host whose handle you cannot know.
 
+**The heading scan is a shortlist in BOTH directions, and the rollout that trusted it proved it.**
+A later pass read every skill in the same marketplace instead of only the scan's hits. About one in
+five of the real workflows had never been shortlisted: their steps sat under `## The flow`, a
+non-English "steps" heading, a numbered bold list or plain prose. The marker grep also had a false
+positive. The authoring guide itself quotes both marker sentences, in its template and in prose about
+them, so `grep -L` treated it as conforming although it has no runtime step list at all. Two rules
+follow. **The inventory has to cover every skill, not the scan's output**, or "unlisted" silently
+means "not a workflow". **And a conformance check has to ignore a marker inside a code fence or
+backticks**, or any skill that *discusses* the block passes as one that *has* it.
+
 ## 10. Two capability checks that could only answer "no", and one that could only answer "yes" (§6)
 
 **The self-confirming half.** Measured 2026-08-23 on a task skill backed by an MCP tool that the host

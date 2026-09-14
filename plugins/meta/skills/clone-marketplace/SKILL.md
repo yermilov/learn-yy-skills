@@ -28,6 +28,33 @@ clone/update always gets today's meta plugin, whatever is (or isn't) on the mach
 The work is deterministic, so it lives in a script — you mostly run it and then do the human-only
 follow-ups (create the GitHub repo, review, commit).
 
+## Register the run
+
+Register these as todo items now, before doing anything else, in whatever todo/plan tool this host
+gives you — and while work remains keep exactly one in progress. Register the list for the branch
+this run follows:
+
+**`--new`:** 1. Check `bun` is installed, else run install-bun (§ The script)
+2. Run `--new` with the name and owner (§ 1)   3. Run the plugin-dev pre-ship checklist over the
+result (§ After running) — its close enumerates the three checks
+4. Confirm no secrets landed in the scaffold (§ After running)   5. Hand the user the human
+follow-ups: create the GitHub repo, commit + push, add plugins (§ 1)
+
+**`--update`:** 1. Check `bun` is installed, else run install-bun (§ The script)
+2. Preview with `--update --dry-run` (§ 2)   3. Run `--update` (§ 2)
+4. Review `git status` + `git diff` (§ 2, step 1)   5. Run the plugin-dev pre-ship checklist
+(§ After running) — its close enumerates the three checks   6. Confirm no secrets landed
+(§ After running)   7. Commit, without bumping marketplace `metadata.version` (§ 2, step 2)
+
+Register the conditional steps too: one a branch makes moot is completed WITH THAT REASON, never
+left open — an unfinished list at the end must mean something really is unfinished.
+No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
+its name differs per host. Anything that creates items and marks them in progress and completed IS
+that tool, whatever it is called; an empty result for one remembered name is evidence about the name,
+not about the host. It must be the SESSION's own planner, never an external tracker (Jira, Linear, a
+task app): your bookkeeping is not their backlog. If there truly is none, keep the list in your
+replies — state it once, name each item as you start it, account for every one at the end.
+
 ## The script
 
 Written in Bun + TypeScript (per the repo's script rule), so it needs **Bun** installed — if `bun` is

@@ -73,6 +73,39 @@ to become invokable on the next session start. **So: after shipping a plugin, do
 that route to it without checking it is on disk — and when you do write such a
 routing rule, give it a capability gate plus a named fallback.**
 
+## Register the run
+
+Register these as todo items now, before doing anything else, in whatever todo/plan tool this host
+gives you — and while work remains keep exactly one in progress:
+1. Identify the host and list the configured marketplaces (§ Check 1, first bullet; § Codex)
+2. Refresh the remote catalog (§ Check 1; § When to act) — a state change, so only with the user's
+go-ahead to update/fix; a plain "check" request completes it «not refreshed», versions reported unverified
+3. Read the ACTIVE installed versions from the registry, not the cache tree (§ Check 1)
+4. Compare installed vs remote per plugin, naming the version-pin gotcha where it applies (§ Check 1)
+5. Enabled-vs-installed diagnosis — registry + clone commit + marketplace `metadata.version`
+(§ Why staleness happens, «ENABLED IS NOT INSTALLED») — only when a plugin never appeared at all
+6. Read the per-marketplace `autoUpdate` flag, project over user (§ Check 2)
+7. Check the global env override, `DISABLE_AUTOUPDATER` / `FORCE_AUTOUPDATE_PLUGINS` (§ Check 2)
+8. Propose the fix and get the go-ahead before any refresh, install, `/plugin update` or settings edit
+(§ When to act)
+9. Report the verdict (§ Output)
+**On Codex** items 2–7 read differently (§ Codex): 2 is `codex plugin marketplace upgrade`, 3–4 compare
+the cached `<version>` path segment, 5 is completed «Claude Code only», 6 is `source_type`, and 7 is
+completed «no Codex equivalent».
+Register the conditional steps too: one a branch makes moot is completed WITH THAT REASON, never
+left open — an unfinished list at the end must mean something really is unfinished.
+No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
+its name differs per host. Anything that creates items and marks them in progress and completed IS
+that tool, whatever it is called; an empty result for one remembered name is evidence about the name,
+not about the host. It must be the SESSION's own planner, never an external tracker (Jira, Linear, a
+task app): your bookkeeping is not their backlog. If there truly is none, keep the list in your
+replies — state it once, name each item as you start it, account for every one at the end.
+
+Run from inside another workflow (after shipping a plugin change, say), these items ADD to that
+list rather than replacing it; the calling item is the gate and completes when your last item does.
+On an item-oriented todo tool they land at the tail, after the caller's closing items; that is
+expected, do not renumber.
+
 ## Check 1 — latest version installed?
 
 Run these; treat every command as "verify with `--help` if it errors — the CLI

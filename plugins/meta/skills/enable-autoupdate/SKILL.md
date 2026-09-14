@@ -17,6 +17,26 @@ host, so branch first:**
 
 Pair with **marketplace-health** to confirm the result.
 
+## Register the run
+
+Register these as todo items now, before doing anything else, in whatever todo/plan tool this host
+gives you — only the branch for the host you are fixing — and while work remains keep exactly one in
+progress:
+- **Claude Code:** 1. Identify the marketplace name + repo (§1)   2. Turn it on — UI, or a
+  settings.json diff shown and approved first (§2)   3. Check the `DISABLE_AUTOUPDATER` override (§3)
+  4. Verify it reads ON (§4)   5. Report (Output)
+- **Codex:** 1. Read the marketplace's `source_type` (Codex)   2. Act on it (Codex) — `git`: nothing
+  to enable, `upgrade` only if an immediate refresh was asked for; `local`: re-add from Git, unless
+  it is a deliberate dev checkout (then leave it and say so)   3. Report (Output)
+Register the conditional steps too: one a branch makes moot is completed WITH THAT REASON, never
+left open — an unfinished list at the end must mean something really is unfinished.
+No such tool? SEARCH for one first — on hosts with deferred tools it exists but is not loaded, and
+its name differs per host. Anything that creates items and marks them in progress and completed IS
+that tool, whatever it is called; an empty result for one remembered name is evidence about the name,
+not about the host. It must be the SESSION's own planner, never an external tracker (Jira, Linear, a
+task app): your bookkeeping is not their backlog. If there truly is none, keep the list in your
+replies — state it once, name each item as you start it, account for every one at the end.
+
 ## 1. Identify the marketplace name (Claude Code)
 
 The name is the `name` field in the marketplace's `marketplace.json` (e.g.

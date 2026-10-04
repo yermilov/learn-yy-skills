@@ -222,8 +222,13 @@ upstream. Escalating to the ISP on an untested adapter is the expensive version 
 ~60–90 s that every client sees at once is the signature of a router reboot, not of the ISP. You can
 prove it **without the admin password**: most consumer routers run miniupnpd, and UPnP answers an
 unauthenticated LAN query. SSDP-discover `urn:schemas-upnp-org:service:WANIPConnection:1`, then
-SOAP `GetStatusInfo` on its control URL → `NewUptime` (seconds since boot; a drop = a reboot, and
-`now − uptime` dates it). `WANCommonInterfaceConfig` → `GetTotalBytesReceived`/`Sent` gives WAN
+SOAP `GetStatusInfo` on its control URL → `NewUptime` (`now − uptime` dates the start). ⚠️ That is
+the UPnP daemon's uptime, or the system's when miniupnpd runs with `system_uptime=yes` — a daemon
+restart (some firmware restarts it on a WAN reconnect) resets it WITHOUT a reboot, so confirm each
+drop with the clients losing the gateway around that instant (Wi-Fi link down, ping gap) before you
+call it a reboot. Do not use the description's `UDN` as the router's identity either: an Archer AX23
+v2 regenerated it on every boot (two boots on 04.10.2026, two different `uuid:`s), and its control
+path is randomised per boot too — rediscover after any SOAP failure. `WANCommonInterfaceConfig` → `GetTotalBytesReceived`/`Sent` gives WAN
 traffic, so you can see whether reboots follow load. The device description's `modelNumber` often
 carries the firmware build. Log uptime every ~20 s plus a 1 Hz ping of the gateway and of a public IP
 to a **local file** (an outage cannot stop a local log), and keep the logging host awake on power: a

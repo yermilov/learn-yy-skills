@@ -218,6 +218,19 @@ upstream. Escalating to the ISP on an untested adapter is the expensive version 
   latency. Find out if one is in the path (router/mesh UI shows satellite nodes and their clients).
 - **Client** — negotiated rate and signal from step 1 tell you if the device is the limit.
 
+**"The Wi-Fi drops every so often" — prove whether the ROUTER reboots before theorising.** A drop of
+~60–90 s that every client sees at once is the signature of a router reboot, not of the ISP. You can
+prove it **without the admin password**: most consumer routers run miniupnpd, and UPnP answers an
+unauthenticated LAN query. SSDP-discover `urn:schemas-upnp-org:service:WANIPConnection:1`, then
+SOAP `GetStatusInfo` on its control URL → `NewUptime` (seconds since boot; a drop = a reboot, and
+`now − uptime` dates it). `WANCommonInterfaceConfig` → `GetTotalBytesReceived`/`Sent` gives WAN
+traffic, so you can see whether reboots follow load. The device description's `modelNumber` often
+carries the firmware build. Log uptime every ~20 s plus a 1 Hz ping of the gateway and of a public IP
+to a **local file** (an outage cannot stop a local log), and keep the logging host awake on power: a
+sleeping laptop is a blind spot, never a quiet period — cross-check its sleep/wake log before reading
+any gap. Run it across the time of day the owner reports the drops; a clean night proves nothing
+about the evening.
+
 ## 3. Inspect the router admin UI
 
 Log into the router (browser, default `http://192.168.0.1` / `http://192.168.1.1`, or the vendor host

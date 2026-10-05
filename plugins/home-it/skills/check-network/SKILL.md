@@ -236,6 +236,18 @@ sleeping laptop is a blind spot, never a quiet period — cross-check its sleep/
 any gap. Run it across the time of day the owner reports the drops; a clean night proves nothing
 about the evening.
 
+Before you read the boot list, **drop the boots that someone's hands caused**: match each boot against
+when the owner touched the kit, and use photo filenames for that (Pixel's `PXL_YYYYMMDD_HHMMSS` is UTC).
+When the owner photographs the cabling, a boot can follow within minutes. Such a boot is **not**
+evidence of a fault, but it does point at a loose power plug. Rule out
+**load** by comparing WAN Mbit/s in the 5 min before each boot with the busiest windows that had no
+boot. Then use the power test the owner can run without a password. Put the router (and the ONT,
+if there is one) on a UPS or power station, and keep everything else unchanged. If the boots stop,
+the cause is mains or the socket. If they continue, the router's own adapter or the router is at
+fault. **The WAN type is in the UPnP description:** `WANIPConnection` means IPoE/DHCP and
+`WANPPPConnection` means PPPoE. A factory reset of an IPoE router with a default SSID costs only the
+Wi-Fi name and password. Find that out before you rule a reset out.
+
 ## 3. Inspect the router admin UI
 
 Log into the router (browser, default `http://192.168.0.1` / `http://192.168.1.1`, or the vendor host

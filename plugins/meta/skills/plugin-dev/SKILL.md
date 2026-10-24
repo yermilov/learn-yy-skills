@@ -4,12 +4,13 @@ description: >-
   Build and maintain a great AI-agent skills marketplace and the plugins that live in it. Covers the
   git-repo layout, the Claude (.claude-plugin) + Codex (.agents / .codex-plugin) DUAL-manifest
   packaging that lets one repo serve both hosts, the version-bump discipline the marketplace
-  auto-update keys off, how to add a plugin or a skill, and what makes a plugin/skill actually worth
-  installing. Use when: creating a plugin marketplace, adding/removing a plugin, packaging a skill for
+  auto-update keys off, how to add a plugin or a skill, which plugin a skill belongs in (domain vs
+  tool plugins, dependencies, when to split, move or merge), and what makes a plugin/skill actually
+  worth installing. Use when: creating a plugin marketplace, adding/removing a plugin, packaging a skill for
   Claude Code / Claude Cowork / Codex, writing or fixing a marketplace.json or plugin.json, or
   debugging why a newly-added plugin or skill doesn't show up after an update. Triggers include "set
   up a plugin marketplace", "add a plugin", "package this skill for Claude and Codex", "marketplace.json",
-  "my new plugin isn't showing up". Do not use for writing the SKILL.md prose itself (that's a
+  "my new plugin isn't showing up", "which plugin should this skill go in", "should I split this plugin". Do not use for writing the SKILL.md prose itself (that's a
   skill-authoring guide) — this skill is about the marketplace + plugin PACKAGING.
 ---
 
@@ -60,7 +61,8 @@ reach installed clients). Anything that doesn't serve it is noise — cut it.
   with **two** manifests and a `skills/` folder. One marketplace = the repo, with **two** top-level
   marketplace manifests.
 - **Prefer** several small, single-purpose plugins over one giant plugin — installers add only what
-  they want, and a focused plugin description triggers better in the Directory.
+  they want, and a focused plugin description triggers better in the Directory. Which skills go
+  together, and when to split, move or merge, is section 8.
 
 ## 2. The two marketplace manifests
 
@@ -184,7 +186,7 @@ plugin's `version` in both manifests**; mention it in the plugin README. (No mar
 **Split skills into a new plugin:** `git mv` the skill dirs, create the new plugin's two manifests,
 register it in both marketplace files, bump the SOURCE plugin's version, and update READMEs.
 Cross-skill references resolve by **name** across all installed plugins, so no rewrites are needed —
-just keep the referenced plugins installed alongside.
+just keep the referenced plugins installed alongside. (*When* to split, move or merge: section 8.)
 
 ## 7. Maintaining the READMEs
 
@@ -209,6 +211,63 @@ ships without touching them, so treat updating them as part of every change, not
   A plugin README edit is a plugin-file change, so the plugin **version bump** (section 4) applies.
 - Keep repo-wide conventions (layout, version discipline) out of plugin READMEs — they live in this
   skill and in the repo's `CLAUDE.md`; a plugin README describes only that plugin.
+
+## 8. Where a skill belongs — grouping skills into plugins
+
+Section 6 says *how* to add, split and move; this section says *when*. The organising idea: **a
+plugin is the unit of an install decision.** Skills live together when the same user on the same
+host wants them together.
+
+**Two kinds of plugin.** Name which kind a plugin is before deciding anything else:
+- **Domain plugin** — grouped around a domain object the user cares about: money, tasks, home,
+  health, a client's shop. Its skills are the *jobs* done on that object.
+- **Tool plugin** — grouped around an instrument: a browser, a messenger, an image generator, a
+  cloud provider. Its skills are *how to drive* that instrument, reusable by any domain.
+
+A skill that mixes both ("pay the bill through the bank's website") belongs to the **domain**; the
+browser mechanics it needs belong in the tool plugin, referenced by name.
+
+**Dependencies between plugins — allowed, in one direction.** To avoid repeating the same
+instrument recipe in several domains, a domain plugin may **depend on** a tool plugin: its skill
+names the tool skill (`use the <tool-plugin>:<skill> skill to sign in`) instead of copying the
+steps. Rules:
+- **Domain → tool, never tool → domain.** A tool plugin must not know which domains use it; if
+  it starts naming them, the domain-specific part belongs back in the domain plugin.
+- **Tool → tool is fine; domain → domain is a smell.** Two domains that keep calling each other
+  are either one domain (merge) or share an instrument that should be extracted into a tool plugin.
+- **No cycles.**
+- **Declare it.** Today a dependency is a by-name skill reference, not a manifest field the host
+  enforces — so say it in the dependent plugin's README ("Requires: `<tool-plugin>`") and keep
+  the depended-on plugin in the same marketplace.
+
+**1. Which existing plugin does a new skill go into?** The one whose one-sentence job already
+covers it *without widening that sentence*. Test: would everyone who installs that plugin want
+this skill? With two candidates, the **domain** decides, not the instrument. Supporting signal:
+the skill shares references, scripts, an MCP server or credentials with its would-be neighbours.
+
+**2. When to create a new plugin.** The skill fits no plugin's job without blurring its
+description ("…and also X"), **or** it has a different *install boundary*: a different audience
+(a separate client), different privacy (public vs private), a single OS or host (a hook-only
+plugin), or heavy dependencies. A one-skill plugin is justified only by such a boundary or by
+being a tool plugin others depend on; otherwise wait for 2–3 skills of the new domain.
+
+**3. When to split a plugin.** Its description no longer fits one sentence without "and… and…";
+its skills fall into clusters that never reference each other; someone wants only part of it; or
+a reusable instrument recipe has grown inside a domain plugin (extract it as a tool plugin and
+depend on it). Size alone (more than ~12–15 skills) is a reason to *look* for clusters, not a
+reason to split.
+
+**4. When to move a skill.** Most of its cross-references and shared references point into
+another plugin; its triggers compete with skills in another plugin; it is a tool recipe sitting
+in a domain plugin (or the reverse); or it landed where it is only because there was no better
+place at the time.
+
+**5. When to merge two plugins.** They are always installed together, have the same audience,
+one sentence describes both, and they reference each other — e.g. a single-channel plugin that
+turned out to be one part of a broader personal-publishing domain.
+
+Whichever you do, the mechanics are section 6, and the version and README rules (sections 4, 7)
+apply to every plugin touched.
 
 ## Pre-ship checklist
 

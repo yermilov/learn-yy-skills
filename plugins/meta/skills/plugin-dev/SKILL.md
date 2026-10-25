@@ -1,17 +1,17 @@
 ---
 name: plugin-dev
 description: >-
-  Build and maintain a great AI-agent skills marketplace and the plugins that live in it. Covers the
-  git-repo layout, the Claude (.claude-plugin) + Codex (.agents / .codex-plugin) DUAL-manifest
-  packaging that lets one repo serve both hosts, the version-bump discipline the marketplace
-  auto-update keys off, how to add a plugin or a skill, which plugin a skill belongs in (domain vs
-  tool plugins, dependencies, when to split, move or merge), and what makes a plugin/skill actually
-  worth installing. Use when: creating a plugin marketplace, adding/removing a plugin, packaging a skill for
-  Claude Code / Claude Cowork / Codex, writing or fixing a marketplace.json or plugin.json, or
-  debugging why a newly-added plugin or skill doesn't show up after an update. Triggers include "set
-  up a plugin marketplace", "add a plugin", "package this skill for Claude and Codex", "marketplace.json",
-  "my new plugin isn't showing up", "which plugin should this skill go in", "should I split this plugin". Do not use for writing the SKILL.md prose itself (that's a
-  skill-authoring guide) — this skill is about the marketplace + plugin PACKAGING.
+  Build and maintain an AI-agent skills marketplace and its plugins: the repo layout, the Claude
+  (.claude-plugin) + Codex (.agents / .codex-plugin) DUAL-manifest packaging that lets one repo serve
+  both hosts, the version-bump discipline the auto-update keys off, adding a plugin or skill, which
+  plugin a skill belongs in (domain, tool and platform plugins, dependencies, when to split, move or
+  merge), and what makes a plugin/skill worth installing. Use when creating a marketplace,
+  adding/removing a plugin, packaging a skill for Claude Code / Cowork / Codex, writing or fixing a
+  marketplace.json or plugin.json, or debugging why a new plugin or skill doesn't show up after an
+  update. Triggers: "set up a plugin marketplace", "add a plugin", "package this skill for Claude and
+  Codex", "marketplace.json", "my new plugin isn't showing up", "which plugin should this skill go
+  in", "should I split this plugin". Not for writing the SKILL.md prose itself (that's
+  skill-authoring) — this is about marketplace + plugin PACKAGING.
 ---
 
 # plugin-dev — how a great skills marketplace looks
@@ -218,11 +218,19 @@ Section 6 says *how* to add, split and move; this section says *when*. The organ
 plugin is the unit of an install decision.** Skills live together when the same user on the same
 host wants them together.
 
-**Two kinds of plugin.** Name which kind a plugin is before deciding anything else:
-- **Domain plugin** — grouped around a domain object the user cares about: money, tasks, home,
-  health, a client's shop. Its skills are the *jobs* done on that object.
+**Three kinds of plugin.** Name which kind a plugin is before deciding anything else:
+- **Domain plugin** — grouped around a domain object the user cares about: money, home, health,
+  a client's shop. Its skills are the *jobs* done on that object.
 - **Tool plugin** — grouped around an instrument: a browser, a messenger, an image generator, a
   cloud provider. Its skills are *how to drive* that instrument, reusable by any domain.
+- **Platform plugin** — the environment every skill runs inside: the task system the agents work
+  from, the profile of facts about the user, the development process. It is neither a job nor an
+  instrument, and *anything* may depend on it, tool plugins included ("report back through the
+  task system", "read the user profile first"). Keep it small and stable in shape — every other
+  plugin pays for its churn.
+
+A plugin grouped by **how its skills are triggered** ("everything that runs on a schedule", "all
+the recurring jobs") is none of the three; that is a sign to split it by domain (rule 3 below).
 
 A skill that mixes both ("pay the bill through the bank's website") belongs to the **domain**; the
 browser mechanics it needs belong in the tool plugin, referenced by name.
@@ -232,7 +240,14 @@ instrument recipe in several domains, a domain plugin may **depend on** a tool p
 names the tool skill (`use the <tool-plugin>:<skill> skill to sign in`) instead of copying the
 steps. Rules:
 - **Domain → tool, never tool → domain.** A tool plugin must not know which domains use it; if
-  it starts naming them, the domain-specific part belongs back in the domain plugin.
+  it starts naming them, the domain-specific part belongs back in the domain plugin. The same goes
+  for a shared service skill inside a domain (a ledger, a policy): it does not keep a list of its
+  consumers — each consumer names it.
+- **Anyone → platform.** Domain and tool plugins alike may depend on a platform plugin; a
+  platform plugin depends on nothing but other platform plugins.
+- **A routing pointer is not a dependency.** "Not for X — that's `<other-plugin>:<skill>`" in a
+  description or a *Do not use* line only sends the agent elsewhere; it is allowed in any
+  direction. A dependency is a skill that *uses* another skill's method to do its job.
 - **Tool → tool is fine; domain → domain is a smell.** Two domains that keep calling each other
   are either one domain (merge) or share an instrument that should be extracted into a tool plugin.
 - **No cycles.**
@@ -265,6 +280,22 @@ place at the time.
 **5. When to merge two plugins.** They are always installed together, have the same audience,
 one sentence describes both, and they reference each other — e.g. a single-channel plugin that
 turned out to be one part of a broader personal-publishing domain.
+
+**Privacy is a separate axis — where a plugin may live, not which plugin a skill joins.** In a
+private marketplace almost every plugin carries some personal context (names, accounts,
+addresses), so "this plugin holds the user's personal memory" does not single out a plugin type
+and is not a reason to merge. Split the memory by scope instead: facts about the user that no one
+domain owns live in **one platform plugin** (the user profile); facts of a domain live in that
+**domain plugin, beside the method that uses them** — so when a domain is split out, its memory
+moves with it. What privacy DOES decide is the install boundary of rule 2: a skill carrying
+personal data never joins a public plugin or marketplace — strip it to the reusable pattern first,
+or give it a private plugin of its own. Inside one private marketplace, where every plugin is
+already private, privacy draws no further line.
+
+**A private, single-user marketplace weakens the install-decision argument** — everything gets
+installed, so "would everyone who installs it want this skill?" rarely says no. There, decide by
+the other signals above: whether the plugin's description still fits one sentence, whether its
+skills form clusters that reference each other, and which direction the dependencies run.
 
 Whichever you do, the mechanics are section 6, and the version and README rules (sections 4, 7)
 apply to every plugin touched.

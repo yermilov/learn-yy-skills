@@ -7,7 +7,7 @@ itself. It ships six skills and a session-start hook:
 
 - **plugin-dev** — a prescriptive guide to building a great skills marketplace and the plugins that
   live in it: the repo layout, the **Claude + Codex dual-manifest** packaging, the **version-bump
-  discipline** the marketplace auto-update keys off, **where a skill belongs** (domain vs tool plugins,
+  discipline** the marketplace auto-update keys off, **where a skill belongs** (domain, tool and platform plugins,
   one-way dependencies, when to create, split, move or merge a plugin), and what makes a plugin/skill
   actually worth installing. Trigger when setting up or growing a plugin marketplace, adding a plugin,
   deciding which plugin a skill goes in, packaging a skill for Claude and/or Codex, or debugging why an

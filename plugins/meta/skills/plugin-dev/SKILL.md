@@ -21,7 +21,7 @@ of **skills** (+ optional commands, agents, MCP servers) with a manifest. Agents
 its skills become available. The whole thing is plain files in git — no build step, no server.
 
 This skill is the prescriptive guide to structuring that repo so it (a) installs cleanly on **both**
-Claude and Codex from one source, and (b) reliably delivers updates. The `learn-yy-skills` repo this
+Claude and Codex from one source, and (b) reliably delivers updates. The `yystack` repo this
 skill ships in is the worked example.
 
 ## The one job
@@ -72,7 +72,7 @@ Each host reads its own file. Keep both listing the **same** plugins.
 
 ```json
 {
-  "name": "learn-yy-skills",
+  "name": "yystack",
   "owner": { "name": "Your Name", "email": "you@example.com" },
   "metadata": {
     "description": "One line on what this marketplace is.",
@@ -92,8 +92,8 @@ Each host reads its own file. Keep both listing the **same** plugins.
 
 ```json
 {
-  "name": "learn-yy-skills",
-  "interface": { "displayName": "Learn YY Skills" },
+  "name": "yystack",
+  "interface": { "displayName": "yystack" },
   "plugins": [
     {
       "name": "meta",

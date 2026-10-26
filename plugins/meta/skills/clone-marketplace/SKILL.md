@@ -2,7 +2,7 @@
 name: clone-marketplace
 description: >-
   Bootstrap a NEW AI-agent skills marketplace, or bring an existing one up to date, from the
-  canonical learn-yy-skills structure + its meta plugin — always fetched from GitHub at the LATEST
+  canonical yystack structure + its meta plugin — always fetched from GitHub at the LATEST
   version, never a copy that happens to be on this machine. Use when the user wants to "create/start
   my own skills marketplace", "clone/bootstrap a marketplace like this one", "scaffold a new plugin
   marketplace repo", or "update my marketplace's meta plugin / structure to the latest" — «створи свій
@@ -68,7 +68,7 @@ bun run scripts/clone-marketplace.ts --update <target-dir> [--source <git-url>]
 bun run scripts/clone-marketplace.ts --new ... --dry-run   # print actions, change nothing
 ```
 
-`--source` defaults to `https://github.com/yermilov/learn-yy-skills`; override it to seed from a
+`--source` defaults to `https://github.com/yermilov/yystack`; override it to seed from a
 different canonical marketplace. It requires `git`. It **never** creates the GitHub repo or pushes —
 that stays a human step (auth, naming, visibility).
 

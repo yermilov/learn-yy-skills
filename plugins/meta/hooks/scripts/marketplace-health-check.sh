@@ -20,7 +20,7 @@ fi
 
 # Bun not installed — the check can't run. Nudge to the install-bun skill (the text
 # is plain, so the jq-less fallback needs no escaping).
-MSG="[learn-yy-skills] the marketplace-health session-start check runs on Bun, which isn't installed. Run the install-bun skill to set it up — then this check works automatically."
+MSG="[yystack] the marketplace-health session-start check runs on Bun, which isn't installed. Run the install-bun skill to set it up — then this check works automatically."
 if command -v jq >/dev/null 2>&1; then
   jq -cn --arg c "$MSG" '{hookSpecificOutput:{hookEventName:"SessionStart",additionalContext:$c}}'
 else

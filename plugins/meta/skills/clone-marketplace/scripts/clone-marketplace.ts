@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * clone-marketplace.ts — bootstrap a NEW skills marketplace, or UPDATE an existing
- * one, from the canonical learn-yy-skills structure + its meta plugin.
+ * one, from the canonical yystack structure + its meta plugin.
  *
  * It ALWAYS fetches the meta plugin and scaffold from the source repo on GitHub at
  * its LATEST commit (a shallow clone of the default branch) — never a local copy —
@@ -32,7 +32,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const DEFAULT_SOURCE = 'https://github.com/yermilov/learn-yy-skills';
+const DEFAULT_SOURCE = 'https://github.com/yermilov/yystack';
 
 function die(msg: string): never {
   console.error(`error: ${msg}`);
@@ -136,7 +136,7 @@ try {
   const metaDescription: string = upstreamManifest.description ?? '';
   say(`upstream meta plugin version: ${upstreamVersion}`);
 
-  // The source marketplace's own name (e.g. "learn-yy-skills"), read from its manifest rather
+  // The source marketplace's own name (e.g. "yystack"), read from its manifest rather
   // than hard-coded — it's the token the copied meta's SessionStart health hook self-identifies
   // with, and what we retarget to the destination below.
   const upstreamName: string = (() => {
@@ -150,7 +150,9 @@ try {
   })();
 
   const renamedClaudeMd = (toName: string) =>
-    readFileSync(join(upstream, 'CLAUDE.md'), 'utf8').replaceAll('learn-yy-skills', toName);
+    // Retitle only the guide's heading: a blanket replace of the source name would also mangle
+    // ordinary words when the source marketplace is named something common (e.g. "skills").
+    readFileSync(join(upstream, 'CLAUDE.md'), 'utf8').replace(`# ${upstreamName} —`, `# ${toName} —`);
 
   // Retarget the copied meta's SessionStart health hook to the DESTINATION marketplace, so it
   // watches the marketplace it's installed in — not the canonical source it was cloned from.
@@ -217,7 +219,7 @@ try {
             name,
             owner: { name: ownerName, email: ownerEmail },
             metadata: {
-              description: 'A skills marketplace bootstrapped from learn-yy-skills.',
+              description: 'A skills marketplace bootstrapped from yystack.',
               version: '0.1.0',
             },
             plugins: [{ name: 'meta', source: './plugins/meta', description: metaDescription }],
@@ -340,7 +342,7 @@ function starterReadme(mp: string, owner: string, desc: string, src: string): st
   return `# ${mp}
 
 ${owner}'s skills marketplace — an installable Claude Code / Codex plugin
-marketplace, bootstrapped from [learn-yy-skills](${src}).
+marketplace, bootstrapped from [yystack](${src}).
 
 ## Plugins
 

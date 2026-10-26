@@ -1,7 +1,7 @@
 {
-  "name": "learn-yy-skills",
+  "name": "yystack",
   "interface": {
-    "displayName": "Learn YY Skills"
+    "displayName": "yystack"
   },
   "plugins": [
     {

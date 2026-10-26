@@ -1,6 +1,6 @@
 ---
 name: enable-autoupdate
-description: Turn ON auto-update for an installed plugin marketplace — Claude Code or Codex — so it stays current on its own. On Claude Code, set extraKnownMarketplaces.<name>.autoUpdate=true in settings.json (or the /plugin UI toggle); on Codex, git-sourced marketplaces already auto-update, so the fix for a stale one is re-adding it from its Git source or running `codex plugin marketplace upgrade`. Use when the user asks to "enable/turn on marketplace auto-updates", "keep my plugins up to date automatically", "stop my marketplace going stale", "make learn-yy-skills auto-update", or right after marketplace-health reports auto-update OFF — «увімкни авто-апдейт маркетплейсу», «хай плагіни оновлюються самі». This is the ACTION counterpart to marketplace-health (which only diagnoses); do not use it to check status, nor to author/version a marketplace (that is plugin-dev).
+description: Turn ON auto-update for an installed plugin marketplace — Claude Code or Codex — so it stays current on its own. On Claude Code, set extraKnownMarketplaces.<name>.autoUpdate=true in settings.json (or the /plugin UI toggle); on Codex, git-sourced marketplaces already auto-update, so the fix for a stale one is re-adding it from its Git source or running `codex plugin marketplace upgrade`. Use when the user asks to "enable/turn on marketplace auto-updates", "keep my plugins up to date automatically", "stop my marketplace going stale", "make yystack auto-update", or right after marketplace-health reports auto-update OFF — «увімкни авто-апдейт маркетплейсу», «хай плагіни оновлюються самі». This is the ACTION counterpart to marketplace-health (which only diagnoses); do not use it to check status, nor to author/version a marketplace (that is plugin-dev).
 ---
 
 # Enable marketplace auto-update
@@ -40,7 +40,7 @@ replies — state it once, name each item as you start it, account for every one
 ## 1. Identify the marketplace name (Claude Code)
 
 The name is the `name` field in the marketplace's `marketplace.json` (e.g.
-`learn-yy-skills`), and it's the key you'll write under `extraKnownMarketplaces`.
+`yystack`), and it's the key you'll write under `extraKnownMarketplaces`.
 Confirm what's installed non-interactively:
 
 ```

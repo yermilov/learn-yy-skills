@@ -1,12 +1,12 @@
 {
-  "name": "learn-yy-skills",
+  "name": "yystack",
   "owner": {
     "name": "Yaroslav Yermilov",
     "email": "yermilov17@gmail.com"
   },
   "metadata": {
     "description": "Yaroslav Yermilov's public showcase of AI-agent skills — an installable Claude Code / Codex plugin marketplace.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "plugins": [
     {

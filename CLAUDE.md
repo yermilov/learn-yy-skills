@@ -1,4 +1,4 @@
-# learn-yy-skills — repository guide
+# yystack — repository guide
 
 Guidance for agents (and humans) working in this marketplace repo. `AGENTS.md` is a
 symlink to this file, so Claude Code, Codex, and other agents all read the same guide.

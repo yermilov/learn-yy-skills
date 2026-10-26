@@ -12,7 +12,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 
-const MARKETPLACE = 'learn-yy-skills';
+const MARKETPLACE = 'yystack';
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT ?? process.env.PLUGIN_ROOT ?? '';
 
 function emit(text: string): void {

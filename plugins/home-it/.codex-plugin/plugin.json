@@ -1,6 +1,6 @@
 {
   "name": "home-it",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Home IT skills. Ships check-network: a repeatable playbook for home-network speed and DNS failures (compare system / router / public resolvers, inspect caches / upstreams / filters, measure throughput / bufferbloat / packet loss / Wi-Fi signal, localize the failing layer, inspect the router UI, and verify one fix at a time). The same SKILL.md files back the Claude Code plugin.",
   "author": {
     "name": "Yaroslav Yermilov",
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Home IT",
     "shortDescription": "Diagnose home-network speed and DNS failures",
-    "longDescription": "Home IT skills for the learn-yy-skills marketplace. check-network is a repeatable playbook for home-network speed and DNS failures. Its DNS branch compares the system resolver, LAN gateway and public controls, uses negative-cache TTLs to separate transient answers from persistent defects, inspects router upstreams and filters, changes one setting at a time, and verifies the real service before removing device overrides. Its performance branch measures throughput, loaded latency, packet loss and link quality across ISP, router, Wi-Fi path and client, then ranks fixes by leverage.",
+    "longDescription": "Home IT skills for the yystack marketplace. check-network is a repeatable playbook for home-network speed and DNS failures. Its DNS branch compares the system resolver, LAN gateway and public controls, uses negative-cache TTLs to separate transient answers from persistent defects, inspects router upstreams and filters, changes one setting at a time, and verifies the real service before removing device overrides. Its performance branch measures throughput, loaded latency, packet loss and link quality across ISP, router, Wi-Fi path and client, then ranks fixes by leverage.",
     "developerName": "Yaroslav Yermilov",
     "category": "Productivity",
     "capabilities": [

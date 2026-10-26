@@ -1,6 +1,6 @@
 # meta
 
-The **meta** plugin for the `learn-yy-skills` marketplace — the tooling for building the marketplace
+The **meta** plugin for the `yystack` marketplace — the tooling for building the marketplace
 itself. It ships six skills and a session-start hook:
 
 ## Skills

@@ -1,6 +1,6 @@
-# learn-yy-skills
+# yystack
 
-[![skills.sh](https://skills.sh/b/yermilov/learn-yy-skills)](https://skills.sh/yermilov/learn-yy-skills)
+[![skills.sh](https://skills.sh/b/yermilov/yystack)](https://skills.sh/yermilov/yystack)
 
 **Yaroslav Yermilov's public marketplace of AI-agent skills** — an installable collection of Claude
 Code / Claude Cowork / Codex plugins. Each plugin is a small folder of **skills** (reusable operating
@@ -26,19 +26,24 @@ It ships as a **dual marketplace** so one source serves both hosts:
 In a Claude Code session:
 
 ```
-/plugin marketplace add yermilov/learn-yy-skills
-/plugin install meta@learn-yy-skills
+/plugin marketplace add yermilov/yystack
+/plugin install meta@yystack
 ```
 
 The first command registers this repo as a marketplace; the second installs the `meta` plugin. Run
 `/plugin` any time to browse installed plugins, and re-run the install (or `/plugin marketplace
-update learn-yy-skills`) to pull the latest.
+update yystack`) to pull the latest.
+
+> **Renamed from `learn-yy-skills`.** The repo and marketplace are now `yystack`; GitHub redirects the old URL,
+> but installs are keyed by the marketplace name, so migrate once: `/plugin marketplace remove learn-yy-skills`,
+> then `/plugin marketplace add yermilov/yystack` and `/plugin install meta@yystack` (likewise `home-it@yystack`).
+> On Codex, re-add the marketplace from `yermilov/yystack` and reinstall the plugins.
 
 ### Claude Cowork / Claude Desktop
 
 1. Open **Settings → Extensions / Plugins → Add marketplace** and paste the repo:
-   `https://github.com/yermilov/learn-yy-skills` (or `yermilov/learn-yy-skills`).
-2. Open the **Directory**, find **Learn YY Skills → meta**, and install it.
+   `https://github.com/yermilov/yystack` (or `yermilov/yystack`).
+2. Open the **Directory**, find **yystack → meta**, and install it.
 3. To pick up new plugins or updates later, use **Check for updates** on the marketplace. (The app
    caches the marketplace manifest by version, so updates appear once the marketplace's version has
    bumped — this repo bumps it whenever the plugin list changes.)
@@ -50,7 +55,7 @@ this on its own, and unlike a fixed command, the request doesn't go stale when t
 changes:
 
 ```
-Install the plugin marketplace https://github.com/yermilov/learn-yy-skills and install the meta plugin from it.
+Install the plugin marketplace https://github.com/yermilov/yystack and install the meta plugin from it.
 ```
 
 Codex reads [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json), so everything it
@@ -63,23 +68,23 @@ Want a single skill rather than the whole plugin? The skills here are plain, hos
 files, so you can install one straight into your agent with
 [`npx skills`](https://github.com/vercel-labs/skills) — no marketplace registration needed. It
 supports Claude Code, Codex, Cursor, and 60+ other agents. All seven skills are listed in the
-[skills.sh](https://skills.sh/yermilov/learn-yy-skills) directory, which the same CLI powers.
+[skills.sh](https://skills.sh/yermilov/yystack) directory, which the same CLI powers.
 
 ```bash
 # Install every skill in the repo, into every agent you have
-npx skills add yermilov/learn-yy-skills
+npx skills add yermilov/yystack
 ```
 
 ```bash
 # See what skills this repo offers
-npx skills add yermilov/learn-yy-skills --list
+npx skills add yermilov/yystack --list
 
 # Install a single skill (by its name) into the current project
-npx skills add yermilov/learn-yy-skills --skill plugin-dev
+npx skills add yermilov/yystack --skill plugin-dev
 
 # …into a specific agent's config, or globally
-npx skills add yermilov/learn-yy-skills --skill plugin-dev -a claude-code
-npx skills add yermilov/learn-yy-skills --skill plugin-dev -a codex --global
+npx skills add yermilov/yystack --skill plugin-dev -a claude-code
+npx skills add yermilov/yystack --skill plugin-dev -a codex --global
 ```
 
 Omit `--skill` to install every skill in the repo; run `npx skills --help` for all agents and options.

@@ -1,6 +1,6 @@
 # home-it
 
-**Home IT** skills for the `learn-yy-skills` marketplace — practical playbooks for the tech in your
+**Home IT** skills for the `yystack` marketplace — practical playbooks for the tech in your
 home.
 
 ## Skills
